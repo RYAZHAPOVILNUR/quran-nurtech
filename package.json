@@ -10,7 +10,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "data": "node scripts/build-data.mjs"
+    "data": "node scripts/build-data.mjs",
+    "updatedesk:init": "node tools/updatedesk-init.mjs",
+    "updatedesk:note": "node tools/updatedesk-note.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
