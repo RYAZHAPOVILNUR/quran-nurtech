@@ -25,7 +25,7 @@
   gap: 5px 10px;
   padding: 8px 6px 2px;
   font-size: var(--fs-12);
-  color: var(--ink-soft);
+  color: var(--sys-secondary-label);
 }
 [data-tajweed]:not(.on) + .tj-legend {
   display: none;
@@ -63,14 +63,14 @@
 .surah-desc {
   overflow: hidden;
   padding: 0;
-  border-color: var(--line);
-  background: var(--surface);
+  border-color: var(--sys-separator);
+  background: var(--sys-secondary-grouped-bg);
 }
 
 .surah-desc summary {
   cursor: pointer;
   padding: 13px 16px;
-  color: var(--ink);
+  color: var(--sys-label);
   font-weight: var(--weight-semibold);
   list-style: none;
 }
@@ -82,7 +82,7 @@
 .surah-desc summary::before {
   display: inline-block;
   margin-right: 8px;
-  color: var(--accent);
+  color: var(--sys-accent);
   content: '▸';
 }
 
@@ -97,10 +97,10 @@
 
 .ayahs {
   padding: 6px 20px;
-  border-color: var(--line);
+  border-color: var(--sys-separator);
   border-radius: 18px;
-  background: var(--surface);
-  box-shadow: 0 14px 34px -30px var(--glass-shadow);
+  background: var(--sys-secondary-grouped-bg);
+  box-shadow: var(--shadow-card);
 }
 
 .ayah {
@@ -108,7 +108,7 @@
 }
 
 .ayah.active {
-  background: color-mix(in srgb, var(--accent-soft) 46%, var(--surface));
+  background: color-mix(in srgb, var(--sys-fill) 52%, var(--sys-secondary-grouped-bg));
 }
 
 .ayah-acts {
@@ -122,7 +122,7 @@
 
 .tafsir-passage,
 .tafsir-details {
-  background: var(--surface-soft);
+  background: var(--sys-grouped-bg);
 }
 
 .surah-desc::before,

@@ -2,7 +2,7 @@
    Reader notes
    ========================================================================== */
 .ayah-note-btn.has {
-  color: var(--accent);
+  color: var(--sys-accent);
   opacity: 1 !important;
 }
 
@@ -27,17 +27,17 @@
 .ayah-note textarea {
   min-height: 64px;
   width: 100%;
-  border: 1px solid var(--hairline);
+  border: 1px solid var(--sys-separator);
   border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--accent) 5%, var(--panel-bg));
-  color: var(--ink);
+  background: var(--sys-fill);
+  color: var(--sys-label);
   padding: 11px 13px;
   font: var(--weight-regular) var(--fs-15) / 1.55 var(--sans);
   resize: vertical;
 }
 
 .ayah-note textarea:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid color-mix(in srgb, var(--sys-accent) 58%, transparent);
   outline-offset: 1px;
 }
 
@@ -45,7 +45,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: var(--ink-faint);
+  color: var(--sys-tertiary-label);
   font-size: var(--fs-12);
 }
 
