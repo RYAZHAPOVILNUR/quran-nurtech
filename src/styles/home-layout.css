@@ -14,7 +14,7 @@
 
 .home-copy .verse {
   direction: rtl;
-  color: var(--accent);
+  color: var(--sys-accent);
   font-family: var(--ar-font), 'AmiriQuran', serif;
   font-size: clamp(23px, 4.4vw, 32px);
   line-height: 1.9;
@@ -23,7 +23,7 @@
 .home-copy .verse-tr {
   max-width: 560px;
   margin: 4px 0 0;
-  color: var(--ink-soft);
+  color: var(--sys-secondary-label);
 }
 
 .home-actions {
@@ -47,9 +47,9 @@
   align-items: center;
   gap: 10px;
   padding: 12px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--sys-separator);
   border-radius: var(--r-md);
-  background: var(--surface);
+  background: var(--sys-secondary-grouped-bg);
 }
 
 .quick-surah > span:last-child {
@@ -59,7 +59,8 @@
 }
 
 .quick-surah:hover {
-  border-color: color-mix(in srgb, var(--accent) 32%, var(--line));
+  border-color: color-mix(in srgb, var(--sys-accent) 22%, var(--sys-separator));
+  background: color-mix(in srgb, var(--sys-fill) 44%, var(--sys-secondary-grouped-bg));
 }
 
 .quick-surah-num {
@@ -69,8 +70,8 @@
   height: 32px;
   place-items: center;
   border-radius: 10px;
-  background: var(--accent-soft);
-  color: var(--accent);
+  background: var(--sys-fill);
+  color: var(--sys-secondary-label);
   font-weight: var(--weight-strong);
 }
 
@@ -84,6 +85,6 @@
 }
 
 .quick-surah small {
-  color: var(--ink-faint);
+  color: var(--sys-tertiary-label);
   font-size: 12px;
 }

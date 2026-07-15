@@ -6,6 +6,9 @@
 }
 .surah-card {
   display: flex;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
   align-items: center;
   gap: 13px;
   cursor: pointer;
@@ -46,6 +49,10 @@
 }
 .surah-card .ar-name {
   flex: none;
+  min-width: 0;
+  max-width: 42%;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-family: var(--ar-font), 'AmiriQuran', serif;
   font-size: 20px;
   direction: rtl;
@@ -63,12 +70,12 @@
   display: grid;
   place-items: center;
   border-radius: 10px;
-  color: var(--ink-faint);
+  color: var(--sys-tertiary-label);
   transition: background 0.15s, color 0.15s;
 }
 .surah-card .acts a:hover {
-  background: var(--accent-soft);
-  color: var(--accent);
+  background: var(--sys-fill);
+  color: var(--sys-label);
 }
 .surah-card .acts svg {
   width: 16px;
