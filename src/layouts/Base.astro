@@ -152,7 +152,16 @@ const tab = (name: 'home' | 'read' | 'mushaf' | 'search') => {
     <script is:inline>
       if ('serviceWorker' in navigator) {
         addEventListener('load', function () {
-          navigator.serviceWorker.register('/sw.js?v=mobile-mushaf-fit-3').catch(function () {});
+          var host = location.hostname;
+          if (host === 'localhost' || host === '127.0.0.1' || host === '[::1]') {
+            navigator.serviceWorker.getRegistrations().then(function (items) {
+              items.forEach(function (item) {
+                item.unregister();
+              });
+            });
+            return;
+          }
+          navigator.serviceWorker.register('/sw.js?v=drawer-tabs-macos-20260715').catch(function () {});
         });
       }
     </script>

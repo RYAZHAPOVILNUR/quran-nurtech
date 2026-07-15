@@ -141,8 +141,7 @@ main[role='main']:not(.wide) > .container {
 
 .drawer .dlist a.on,
 .drawer .dgroup a.on,
-.drawer .dfoot a.on,
-.dtabs button.on {
+.drawer .dfoot a.on {
   background: var(--sys-fill-strong) !important;
   color: var(--sys-label) !important;
 }

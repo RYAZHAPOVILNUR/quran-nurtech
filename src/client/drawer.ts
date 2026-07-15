@@ -182,7 +182,11 @@ export async function initDrawer({ dataVersion, loadIndex }: DrawerOptions) {
   const drawerRoot = $('[data-drawer]');
   $$('[data-dtab]').forEach((t) =>
     t.addEventListener('click', () => {
-      $$('[data-dtab]').forEach((x) => x.classList.toggle('on', x === t));
+      $$('[data-dtab]').forEach((x) => {
+        const active = x === t;
+        x.classList.toggle('on', active);
+        x.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
       drawerRoot?.setAttribute('data-dtab-active', t.getAttribute('data-dtab') || 'surah');
     })
   );
