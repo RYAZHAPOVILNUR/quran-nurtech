@@ -144,6 +144,8 @@
   letter-spacing: 0;
   text-transform: none;
 }
-.settings-field-stack .seg {
+.settings-field-stack .seg,
+.settings-field-stack .ui-segmented {
+  width: 100%;
   margin-top: 1px;
 }

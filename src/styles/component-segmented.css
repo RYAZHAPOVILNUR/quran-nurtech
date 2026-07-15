@@ -15,6 +15,7 @@
 .seg button,
 .ui-segmented button {
   min-width: 0;
+  min-height: var(--seg-button-h, 30px);
   border: 0;
   border-radius: 7px;
   background: transparent;
@@ -50,4 +51,13 @@
 .ui-segmented.seg-grid3 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 820px) {
+  .menu[data-menu='settings'] .seg,
+  .menu[data-menu='settings'] .ui-segmented,
+  .tasbih-card .seg,
+  .tasbih-card .ui-segmented {
+    --seg-button-h: 40px;
+  }
 }

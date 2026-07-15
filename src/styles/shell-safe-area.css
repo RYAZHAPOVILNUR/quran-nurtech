@@ -62,7 +62,4 @@ main {
   .menu button.item {
     min-height: 46px;
   }
-  .seg button {
-    min-height: 40px;
-  }
 }
