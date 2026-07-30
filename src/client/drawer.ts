@@ -59,7 +59,9 @@ function buildDrawerLink({
 
   const name = document.createElement('span');
   name.className = 'nm';
-  name.textContent = title;
+  const titleEl = document.createElement('strong');
+  titleEl.textContent = title;
+  name.appendChild(titleEl);
   name.appendChild(drawerLine(subtitle));
 
   link.append(n, name);

@@ -35,13 +35,14 @@
 
 .quick-surahs {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(172px, 1fr));
   gap: 10px;
   margin: 4px 0 18px;
 }
 
 .quick-surah {
-  display: flex;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
   min-width: 0;
   overflow: hidden;
   align-items: center;
@@ -54,8 +55,8 @@
 
 .quick-surah > span:last-child {
   display: grid;
+  gap: 2px;
   min-width: 0;
-  flex: 1 1 auto;
 }
 
 .quick-surah:hover {

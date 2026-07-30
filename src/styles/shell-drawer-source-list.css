@@ -168,7 +168,72 @@
   flex: none;
   min-height: 0;
   overflow: visible;
-  padding: 2px 6px 6px;
+  padding: 2px 8px 8px;
+}
+
+.drawer .dlist a {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) max-content;
+  align-items: center;
+  column-gap: 10px;
+  min-width: 0;
+  min-height: 36px;
+  padding: 6px 8px;
+  border-radius: var(--radius-s);
+  color: var(--sys-label);
+  font: var(--weight-medium) var(--fs-13) / 1.2 var(--sans);
+  text-decoration: none;
+}
+
+.drawer .dlist a:not(:has(.ar-name)) {
+  grid-template-columns: 28px minmax(0, 1fr);
+}
+
+.drawer .dlist .n {
+  width: 28px;
+  min-width: 0;
+  color: var(--sys-tertiary-label);
+  font-size: var(--fs-13);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.drawer .dlist .nm {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--sys-label);
+  font-size: var(--fs-13);
+  line-height: 1.18;
+}
+
+.drawer .dlist .nm strong,
+.drawer .dlist .nm .drawer-row-sub {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.drawer .dlist .nm strong {
+  color: var(--sys-label);
+  font-weight: var(--weight-semibold);
+}
+
+.drawer .dlist .ar-name {
+  max-width: 72px;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--sys-tertiary-label);
+  direction: rtl;
+  font-family: var(--ar-font), serif;
+  font-size: 15px;
+  line-height: 1;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .drawer .dgroup a:focus-visible,
@@ -241,5 +306,29 @@
     flex: none;
     padding: 8px 14px calc(12px + env(safe-area-inset-bottom));
     background: color-mix(in srgb, var(--sys-secondary-grouped-bg) 92%, transparent);
+  }
+  .drawer .dscroll .dlist {
+    padding-inline: 12px;
+  }
+  .drawer .dlist a {
+    grid-template-columns: 30px minmax(0, 1fr) max-content;
+    min-height: 44px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    font-size: 16px;
+  }
+  .drawer .dlist a:not(:has(.ar-name)) {
+    grid-template-columns: 30px minmax(0, 1fr);
+  }
+  .drawer .dlist .n {
+    width: 30px;
+    font-size: 15px;
+  }
+  .drawer .dlist .nm {
+    font-size: 16px;
+  }
+  .drawer .dlist .ar-name {
+    max-width: 82px;
+    font-size: 17px;
   }
 }
