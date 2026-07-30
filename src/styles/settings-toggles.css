@@ -11,7 +11,7 @@
 }
 .menu .item-toggle .it-label small {
   font-size: var(--fs-11);
-  color: var(--ink-faint);
+  color: var(--sys-tertiary-label);
   font-weight: var(--weight-medium);
 }
 .menu .item-toggle .switch {
@@ -19,11 +19,11 @@
 }
 .menu button.item-toggle.on {
   background: transparent;
-  color: var(--ink);
+  color: var(--sys-label);
   font-weight: var(--weight-medium);
 }
 .menu button.item-toggle.on .switch {
-  background: var(--accent);
+  background: var(--sys-accent);
   border-color: transparent;
 }
 .menu button.item-toggle.on .switch::after {

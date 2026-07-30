@@ -50,9 +50,9 @@
     z-index: 2;
     margin: 0;
     padding: 12px 14px 10px;
-    background: color-mix(in srgb, var(--panel-bg) 96%, transparent);
-    -webkit-backdrop-filter: var(--glass-blur);
-    backdrop-filter: var(--glass-blur);
+    background: color-mix(in srgb, var(--sys-secondary-grouped-bg) 96%, transparent);
+    -webkit-backdrop-filter: var(--material-blur);
+    backdrop-filter: var(--material-blur);
   }
   .menu[data-menu='settings'].open {
     animation: none;
@@ -123,9 +123,9 @@
     top: 0;
     z-index: 2;
     margin: 0;
-    background: color-mix(in srgb, var(--panel-bg) 96%, transparent);
-    -webkit-backdrop-filter: var(--glass-blur);
-    backdrop-filter: var(--glass-blur);
+    background: color-mix(in srgb, var(--sys-secondary-grouped-bg) 96%, transparent);
+    -webkit-backdrop-filter: var(--material-blur);
+    backdrop-filter: var(--material-blur);
   }
 }
 
@@ -157,7 +157,7 @@
     padding: 0;
     border-width: 0 0 0 1px;
     border-radius: 0;
-    background: var(--panel-bg);
+    background: var(--sys-secondary-grouped-bg);
     box-shadow: none;
     opacity: 0;
     pointer-events: none;
@@ -182,9 +182,9 @@
     z-index: 1;
     margin: 0;
     padding: 15px 16px 13px;
-    background: color-mix(in srgb, var(--panel-bg) 96%, transparent);
-    -webkit-backdrop-filter: var(--glass-blur);
-    backdrop-filter: var(--glass-blur);
+    background: color-mix(in srgb, var(--sys-secondary-grouped-bg) 96%, transparent);
+    -webkit-backdrop-filter: var(--material-blur);
+    backdrop-filter: var(--material-blur);
   }
   .menu[data-menu='settings'] .settings-panel-body {
     padding: 12px 16px 18px;

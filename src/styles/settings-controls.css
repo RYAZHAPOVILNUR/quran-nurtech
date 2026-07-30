@@ -3,7 +3,7 @@
   font-size: 11px;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  color: var(--ink-faint);
+  color: var(--sys-tertiary-label);
   font-weight: var(--weight-semibold);
 }
 .menu h4:first-child {
@@ -18,8 +18,8 @@
   gap: 8px;
 }
 .menu button.item.on {
-  background: var(--accent-soft);
-  color: var(--ink);
+  background: color-mix(in srgb, var(--sys-accent) 10%, var(--sys-fill));
+  color: var(--sys-label);
   font-weight: var(--weight-semibold);
 }
 .menu button.item .tick {

@@ -68,6 +68,7 @@ import TopBar from '../components/TopBar.astro';
 import Drawer from '../components/Drawer.astro';
 import Player from '../components/Player.astro';
 import { icons } from '../lib/icons';
+import { getMushafHrefForPath } from '../lib/mushaf-link';
 
 export interface Props {
   title: string;
@@ -86,6 +87,7 @@ const desc =
   'Коран онлайн на русском языке: чтение, перевод, тафсир ас-Саади, аудио чтецов, поиск и заучивание. 114 сур, 6236 аятов.';
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const path = Astro.url.pathname;
+const mushafHref = getMushafHrefForPath(path);
 const tab = (name: 'home' | 'read' | 'mushaf' | 'search') => {
   if (name === 'home') return path === '/' ? 'active' : '';
   if (name === 'read') return path.startsWith('/surah') || path.startsWith('/ayah') || /^\/\d+:\d+/.test(path) ? 'active' : '';
@@ -176,7 +178,7 @@ const tab = (name: 'home' | 'read' | 'mushaf' | 'search') => {
       <div class="container">
         <div class="fnav">
           <a href="/">Главная</a>
-          <a href="/mushaf/1">Мусхаф</a>
+          <a href={mushafHref}>Мусхаф</a>
           <a href="/progress">Мой прогресс</a>
           <a href="/bookmarks">Закладки</a>
           <a href="/topics">Аяты по темам</a>
@@ -211,7 +213,7 @@ const tab = (name: 'home' | 'read' | 'mushaf' | 'search') => {
         <span set:html={icons.book}></span>
         <b>Читать</b>
       </a>
-      <a class={tab('mushaf')} href="/mushaf/1" aria-label="Мусхаф">
+      <a class={tab('mushaf')} href={mushafHref} aria-label="Мусхаф">
         <span set:html={icons.book}></span>
         <b>Мусхаф</b>
       </a>

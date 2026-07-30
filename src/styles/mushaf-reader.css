@@ -10,7 +10,10 @@
 body[data-page-mode='mushaf'] {
   height: var(--mushaf-vvh);
   overflow: hidden;
-  background: var(--mushaf-stage);
+  background:
+    radial-gradient(circle at 50% 10%, color-mix(in srgb, var(--sys-fill-vibrant) 54%, transparent), transparent 36%),
+    linear-gradient(180deg, color-mix(in srgb, var(--mushaf-stage) 88%, var(--sys-secondary-grouped-bg)) 0%, var(--mushaf-stage) 62%),
+    var(--mushaf-stage);
 }
 
 body[data-page-mode='mushaf'] .footer,
@@ -31,12 +34,12 @@ body[data-page-mode='mushaf'] .mushaf-reader {
   height: 100%;
   min-height: 0;
   margin: 0;
-  padding: 14px 22px 18px;
+  padding: 14px 24px 18px;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   align-items: center;
   justify-items: center;
-  gap: 14px;
+  gap: 12px;
   overflow: auto;
   overscroll-behavior: contain;
   scrollbar-gutter: stable both-edges;
@@ -46,34 +49,36 @@ body[data-page-mode='mushaf'] .mushaf-toolbar {
   position: sticky;
   top: 0;
   z-index: 5;
-  width: min(100%, 920px);
+  width: min(100%, 760px);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 8px;
+  gap: 7px;
+  padding: 7px;
   border: 1px solid var(--sys-separator);
-  border-radius: var(--radius-lg);
-  background: var(--sys-material-strong);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--sys-material-strong) 94%, transparent);
   -webkit-backdrop-filter: var(--material-blur);
   backdrop-filter: var(--material-blur);
-  box-shadow: none;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, #fff 12%, transparent) inset,
+    0 14px 34px -30px color-mix(in srgb, var(--sys-label) 36%, transparent);
 }
 
 body[data-page-mode='mushaf'] .mushaf-nav-sel,
 body[data-page-mode='mushaf'] .mushaf-jump,
 body[data-page-mode='mushaf'] .mushaf-zoom,
 body[data-page-mode='mushaf'] .mushaf-fit-btn {
-  min-height: var(--control-h-comfort);
+  min-height: 34px;
   border: 1px solid var(--sys-separator);
-  border-radius: var(--radius-md);
+  border-radius: 11px;
   background: var(--sys-fill);
   color: var(--sys-label);
   box-shadow: none;
 }
 
 body[data-page-mode='mushaf'] .mushaf-nav-sel {
-  max-width: 140px;
+  max-width: 136px;
   padding-inline: 10px 28px;
 }
 
@@ -86,7 +91,7 @@ body[data-page-mode='mushaf'] .mushaf-jump {
 }
 
 body[data-page-mode='mushaf'] .mushaf-jump input {
-  width: 58px;
+  width: 62px;
   height: 28px;
   border-radius: var(--radius-sm);
   text-align: center;
@@ -101,8 +106,8 @@ body[data-page-mode='mushaf'] .mushaf-zoom {
 }
 
 body[data-page-mode='mushaf'] .mushaf-zoom .icon-btn {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
 }
 
 body[data-page-mode='mushaf'] .mushaf-zoom input {
@@ -124,14 +129,14 @@ body[data-page-mode='mushaf'] .mushaf-sheet {
   padding: clamp(16px, 3.1%, 28px) clamp(12px, 2.4%, 22px) clamp(20px, 3.8%, 34px);
   overflow: hidden;
   border: 1px solid var(--mushaf-paper-line);
-  border-radius: 8px;
+  border-radius: 9px;
   background:
     linear-gradient(90deg, transparent, color-mix(in srgb, var(--mushaf-paper-line) 28%, transparent), transparent),
     var(--mushaf-paper);
   color: var(--mushaf-ornament);
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--sys-label) 5%, transparent),
-    0 12px 34px -28px color-mix(in srgb, var(--sys-label) 42%, transparent);
+    0 22px 56px -44px color-mix(in srgb, var(--sys-label) 46%, transparent);
 }
 
 body[data-page-mode='mushaf'] .mushaf-meta {
@@ -199,4 +204,40 @@ body[data-page-mode='mushaf'] .mushaf-bottom {
   display: flex;
   justify-content: center;
   gap: 10px;
+  margin-top: 0;
+}
+
+@media (min-width: 821px) {
+  body[data-page-mode='mushaf'] .topbar {
+    padding-top: 6px;
+  }
+
+  body[data-page-mode='mushaf'] .topbar-inner {
+    border-radius: 0;
+    border-inline: 0;
+    border-top: 0;
+    box-shadow: none;
+    width: 100%;
+    max-width: none;
+  }
+
+  body[data-page-mode='mushaf'] .mushaf-reader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  body[data-page-mode='mushaf'] .mushaf-toolbar .icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+  }
+
+  body[data-page-mode='mushaf'] .mushaf-bottom .btn {
+    height: 36px;
+    min-height: 36px;
+    padding-inline: 14px;
+    border-radius: 12px;
+  }
 }

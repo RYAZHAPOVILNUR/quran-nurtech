@@ -5,8 +5,10 @@ import { icons } from '../lib/icons';
 import IconButton from './ui/IconButton.astro';
 import ListRow from './ui/ListRow.astro';
 import SegmentedControl from './ui/SegmentedControl.astro';
+import { getMushafHrefForPath } from '../lib/mushaf-link';
 
 const path = Astro.url.pathname;
+const mushafHref = getMushafHrefForPath(path);
 const on = (p: string) =>
   path === p || (p !== '/' && p !== '/surah/1' && path.startsWith(p)) ? 'on' : '';
 
@@ -50,7 +52,7 @@ const svgTasbih =
 
     <nav class="dgroup" aria-label="Разделы">
       <div class="dgroup-title">Разделы</div>
-      <ListRow class={on('/mushaf')} href="/mushaf/1" aria-current={on('/mushaf') ? 'page' : undefined}>
+      <ListRow class={on('/mushaf')} href={mushafHref} aria-current={on('/mushaf') ? 'page' : undefined}>
         <span class="di" set:html={icons.book} />Мусхаф
       </ListRow>
       <ListRow class={on('/topics')} href="/topics" aria-current={on('/topics') ? 'page' : undefined}>

@@ -61,11 +61,12 @@
     syncViewportHeight();
     var isMobile = window.matchMedia('(max-width: 650px)').matches;
     var isImmersive = body.classList.contains('mushaf-immersive');
-    var widthSpace = Math.max(280, reader.clientWidth - (isMobile ? 12 : 56));
+    var widthSpace = Math.max(280, reader.clientWidth - (isMobile ? 12 : 64));
     var heightReserve = isImmersive ? (isMobile ? 96 : 118) : isMobile ? 118 : 136;
     var heightSpace = Math.max(420, reader.clientHeight - heightReserve);
-    var fitWidth = Math.min(widthSpace, heightSpace * 0.704, isMobile ? 620 : 760);
-    var minWidth = isMobile ? Math.min(330, widthSpace) : 390;
+    var desktopNaturalWidth = Math.max(heightSpace * 0.704, widthSpace * 0.46);
+    var fitWidth = Math.min(widthSpace, isMobile ? heightSpace * 0.704 : desktopNaturalWidth, isMobile ? 620 : 860);
+    var minWidth = isMobile ? Math.min(330, widthSpace) : Math.min(470, widthSpace);
     var pageWidth = Math.round(Math.max(minWidth, fitWidth));
 
     root.style.setProperty('--mushaf-page-w', pageWidth + 'px');
