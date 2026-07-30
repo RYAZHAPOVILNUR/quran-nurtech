@@ -78,9 +78,19 @@ main[role='main']:not(.wide) > .container {
 .toolbar-context {
   display: grid;
   min-width: 0;
-  flex: 0 1 auto;
+  max-width: 240px;
+  flex: 0 1 240px;
   gap: 1px;
   line-height: 1.08;
+}
+
+.toolbar-context .tc-t,
+.toolbar-context .tc-s {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .brand .brand-name,
