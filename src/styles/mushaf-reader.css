@@ -154,26 +154,44 @@ body[data-page-mode='mushaf'] .qcf-page {
   display: grid;
   grid-template-rows: repeat(15, minmax(0, 1fr));
   align-items: center;
-  font-family: var(--font-arabic-mushaf);
+  font-family: var(--mushaf-page-font), 'AmiriQuran', serif;
   font-size: var(--mushaf-qcf-size);
   font-weight: var(--weight-medium);
   line-height: 1;
   color: var(--mushaf-ink);
   direction: rtl;
-  text-align: justify;
   text-rendering: geometricPrecision;
 }
 
+/* Строка мусхафа — flex-контейнер, поэтому выключка делается распределением
+   свободного места между словами, а не text-align: justify (на flex он инертен). */
 body[data-page-mode='mushaf'] .qcf-line {
   min-width: 0;
   white-space: nowrap;
-  text-align-last: justify;
+  justify-content: space-between;
 }
 
+/* Последняя строка блока, декоративные строки и первый разворот (Фатиха +
+   начало Бакары) в печатном мусхафе центрируются, а не растягиваются. */
 body[data-page-mode='mushaf'] .qcf-line.center,
-body[data-page-mode='mushaf'] .qcf-line-deco {
+body[data-page-mode='mushaf'] .qcf-line-deco,
+body[data-page-mode='mushaf'] .qcf-page[data-mushaf-spread='opening'] .qcf-line {
+  justify-content: center;
+}
+
+/* Шрифт страницы не загрузился: системный арабский нарисовал бы глифы QCF
+   как случайные presentation forms, поэтому текст прячем и говорим прямо. */
+.mushaf-font-missing {
+  position: absolute;
+  inset: auto 12% 14%;
+  margin: 0;
+  color: var(--sys-secondary-label);
+  font: var(--weight-medium) var(--text-sm) / 1.5 var(--font-ui);
   text-align: center;
-  text-align-last: center;
+}
+
+body[data-page-mode='mushaf'] .qcf-page[data-mushaf-font='missing'] .qcf-word {
+  visibility: hidden;
 }
 
 body[data-page-mode='mushaf'] .qcf-surah-title {

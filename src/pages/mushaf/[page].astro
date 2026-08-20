@@ -6,7 +6,6 @@ import {
   getMushafMeta,
   getMushafPage,
   getMushafSurah,
-  mushafTajweedFontFamily,
   mushafTajweedFontCss,
   MUSHAF_TOTAL_PAGES,
 } from '../../lib/mushaf';
@@ -52,7 +51,9 @@ const surahLabel = starts.length
       .map((s) => getMushafSurah(meta, s)?.na || `Сура ${s}`)
       .join(' · ');
 const fontCss = mushafTajweedFontCss(pageNum);
-const fontFamily = mushafTajweedFontFamily(pageNum);
+// Первый разворот (Фатиха + начало Бакары) свёрстан в мусхафе отдельно:
+// строк меньше 15 и они центрированы, а не выключены по краям листа.
+const isOpeningSpread = pageNum <= 2;
 
 // навигация по сурам/джузам: текущие сура и джуз для предвыбора + список джузов→страниц
 const currentSurah = starts[0]?.s ?? Number(page.lines[0]?.w[0]?.k.split(':')[0]) ?? 1;
@@ -133,7 +134,7 @@ const juzList = Array.from({ length: 30 }, (_, i) => i + 1).map((n) => ({
         <b>{pageNum}</b>
       </div>
 
-      <div class="qcf-page" dir="rtl" data-mushaf-page={pageNum}>
+      <div class="qcf-page" dir="rtl" data-mushaf-page={pageNum} data-mushaf-spread={isOpeningSpread ? 'opening' : undefined}>
         {
           slots.map((lineNumber) => {
             const line = linesByNumber.get(lineNumber);
@@ -158,7 +159,6 @@ const juzList = Array.from({ length: 30 }, (_, i) => i + 1).map((n) => ({
                 {line?.w.map((word) => (
                   <span
                     class={`qcf-word ${word.e ? 'qcf-word-end' : ''}`}
-                    style={`font-family:'${fontFamily}'`}
                     data-ayah-key={word.k}
                     title={word.k}
                   >
@@ -170,6 +170,11 @@ const juzList = Array.from({ length: 30 }, (_, i) => i + 1).map((n) => ({
           })
         }
       </div>
+
+      <p class="mushaf-font-missing" data-mushaf-font-missing hidden>
+        Не удалось загрузить шрифт этой страницы мусхафа. Проверьте соединение и обновите
+        страницу — без него текст показать нельзя.
+      </p>
     </section>
 
     <nav class="mushaf-bottom container" aria-label="Навигация по страницам">

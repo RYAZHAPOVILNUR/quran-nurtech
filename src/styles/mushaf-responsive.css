@@ -31,7 +31,8 @@
     min-height: 0;
     display: grid;
     grid-template-rows: minmax(0, 1fr);
-    align-items: start;
+    align-items: center;
+    align-items: safe center;
     justify-items: center;
     padding: 4px 0 calc(82px + env(safe-area-inset-bottom));
     overflow: auto;
@@ -90,7 +91,6 @@
   }
 
   body[data-page-mode='mushaf'] .mushaf-sheet {
-    width: min(calc(100vw - 12px), calc((var(--mushaf-vvh) - var(--topbar-h) - 128px) * 0.704));
     min-width: 0;
     margin: 0 auto;
     padding: 18px 10px 24px;
