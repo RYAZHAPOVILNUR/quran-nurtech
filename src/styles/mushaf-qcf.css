@@ -164,6 +164,24 @@
   margin-inline-start: 0.01em;
 }
 
+/* Классический стиль: заголовок суры и басмала приходят готовыми глифами QCF4
+   (QBSML / Hafs_01), поэтому декоративная вёрстка таджвид-стиля им не нужна. */
+.qcf-word[data-qcf-font='QCF4_QBSML'] {
+  font-family: 'QCF4_QBSML', 'AmiriQuran', serif;
+}
+
+.qcf-word[data-qcf-font='QCF4_Hafs_01'] {
+  font-family: 'QCF4_Hafs_01', 'AmiriQuran', serif;
+}
+
+.qcf-glyph-header {
+  color: var(--mushaf-ornament);
+}
+
+.qcf-glyph-basmala {
+  color: var(--mushaf-ink);
+}
+
 .qcf-surah-line {
   align-items: end;
 }

@@ -83,6 +83,7 @@ body[data-page-mode='mushaf'] .mushaf-jump {
   justify-content: center;
   gap: 8px;
   padding: 0 10px;
+  white-space: nowrap;
 }
 
 body[data-page-mode='mushaf'] .mushaf-jump input {
@@ -161,6 +162,21 @@ body[data-page-mode='mushaf'] .qcf-page {
   color: var(--mushaf-ink);
   direction: rtl;
   text-rendering: geometricPrecision;
+}
+
+body[data-page-mode='mushaf'] .qcf-page[data-mushaf-spread='opening'] {
+  /* Дорожки создаём по числу реальных строк: при жёстких 15 промежутки между
+     пустыми дорожками копились внизу и сдвигали блок вверх. */
+  grid-template-rows: none;
+  grid-auto-rows: minmax(0, auto);
+  align-content: center;
+  row-gap: 1.35em;
+}
+
+/* На остальных страницах пустой слот держит сетку из 15 строк, здесь же он
+   добавлял бы row-gap и сдвигал блок вверх — убираем из потока совсем. */
+body[data-page-mode='mushaf'] .qcf-page[data-mushaf-spread='opening'] .qcf-line.is-empty {
+  display: none;
 }
 
 /* Строка мусхафа — flex-контейнер, поэтому выключка делается распределением

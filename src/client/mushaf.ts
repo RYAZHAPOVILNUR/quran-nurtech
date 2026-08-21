@@ -30,30 +30,6 @@
     return Math.max(min, Math.min(max, n));
   }
 
-  // Шрифт страницы приходит с внешнего CDN. Если он не доехал, системный арабский
-  // нарисует глифы QCF как случайные presentation forms — текст будет выглядеть
-  // настоящим, не будучи им. Это хуже пустоты, поэтому прячем и говорим прямо.
-  function watchPageFont() {
-    if (!pageEl || !document.fonts) return;
-    var family = getComputedStyle(pageEl).getPropertyValue('--mushaf-page-font').trim();
-    if (!family) return;
-    var spec = '1em ' + family;
-    var notice = document.querySelector('[data-mushaf-font-missing]');
-    function verdict() {
-      var ok = false;
-      try {
-        ok = document.fonts.check(spec);
-      } catch (e) {}
-      pageEl.setAttribute('data-mushaf-font', ok ? 'ready' : 'missing');
-      if (notice) notice.hidden = ok;
-    }
-    try {
-      document.fonts.load(spec).then(verdict, verdict);
-    } catch (e) {
-      verdict();
-    }
-  }
-
   function currentPage() {
     return parseInt((location.pathname.match(/\/mushaf\/(\d+)/) || [])[1], 10) || 1;
   }
@@ -194,7 +170,10 @@
   } catch (e) {}
 
   layoutMushaf(null);
-  watchPageFont();
+  // стиль мусхафа пересобирает лист — пересчитываем посадку и зум
+  document.addEventListener('mushaf:relayout', function () {
+    layoutMushaf(null);
+  });
   window.addEventListener('resize', function () {
     layoutMushaf(preserveCenter());
   }, { passive: true });

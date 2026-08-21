@@ -9,6 +9,7 @@ import {
   mushafTajweedFontCss,
   MUSHAF_TOTAL_PAGES,
 } from '../../lib/mushaf';
+import { getQcfPage, qcfPageFontCss, qcfSlimPage } from '../../lib/qcf4';
 
 export function getStaticPaths() {
   return Array.from({ length: MUSHAF_TOTAL_PAGES }, (_, i) => ({
@@ -51,6 +52,12 @@ const surahLabel = starts.length
       .map((s) => getMushafSurah(meta, s)?.na || `Сура ${s}`)
       .join(' · ');
 const fontCss = mushafTajweedFontCss(pageNum);
+
+// Классический стиль: та же страница на локальных QCF4-шрифтах. Раскладку встраиваем
+// в HTML (~4 КБ), чтобы переключение стиля и офлайн-фолбэк не ходили в сеть.
+const qcfPage = getQcfPage(pageNum);
+const classicCss = qcfPageFontCss(qcfPage);
+const classicData = JSON.stringify(qcfSlimPage(qcfPage));
 // Первый разворот (Фатиха + начало Бакары) свёрстан в мусхафе отдельно:
 // строк меньше 15 и они центрированы, а не выключены по краям листа.
 const isOpeningSpread = pageNum <= 2;
@@ -66,6 +73,7 @@ const juzList = Array.from({ length: 30 }, (_, i) => i + 1).map((n) => ({
 
 <Base {title} {description} wide pageMode="mushaf">
   <style is:inline set:html={fontCss}></style>
+  <style is:inline set:html={classicCss}></style>
 
   <div class="mushaf-reader">
     <nav class="mushaf-toolbar container" aria-label="Навигация по мусхафу">
@@ -107,6 +115,10 @@ const juzList = Array.from({ length: 30 }, (_, i) => i + 1).map((n) => ({
         <button type="button" class="mushaf-fit-btn" data-mushaf-fit aria-label="Подогнать страницу по экрану" title="Подогнать по экрану">100%</button>
       </div>
 
+      <button type="button" class="icon-btn mushaf-style-btn" data-mushaf-style-toggle aria-label="Стиль мусхафа" title="Стиль: цветной таджвид / классический">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18"/><circle cx="15.5" cy="9" r="1.1" fill="currentColor" stroke="none"/><circle cx="17" cy="13" r="1.1" fill="currentColor" stroke="none"/><circle cx="14.5" cy="16.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+      </button>
+
       <button type="button" class="icon-btn" data-mushaf-immersive aria-label="Режим чтения на весь экран" title="Во весь экран (режим чтения)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
       </button>
@@ -134,7 +146,7 @@ const juzList = Array.from({ length: 30 }, (_, i) => i + 1).map((n) => ({
         <b>{pageNum}</b>
       </div>
 
-      <div class="qcf-page" dir="rtl" data-mushaf-page={pageNum} data-mushaf-spread={isOpeningSpread ? 'opening' : undefined}>
+      <div class="qcf-page" dir="rtl" data-mushaf-page={pageNum} data-mushaf-spread={isOpeningSpread ? 'opening' : undefined} data-mushaf-style="tajweed">
         {
           slots.map((lineNumber) => {
             const line = linesByNumber.get(lineNumber);
@@ -171,6 +183,8 @@ const juzList = Array.from({ length: 30 }, (_, i) => i + 1).map((n) => ({
         }
       </div>
 
+      <script type="application/json" is:inline data-mushaf-classic set:html={classicData}></script>
+
       <p class="mushaf-font-missing" data-mushaf-font-missing hidden>
         Не удалось загрузить шрифт этой страницы мусхафа. Проверьте соединение и обновите
         страницу — без него текст показать нельзя.
@@ -192,5 +206,8 @@ const juzList = Array.from({ length: 30 }, (_, i) => i + 1).map((n) => ({
 
   <script>
     import '../../client/mushaf';
+    import { initMushafStyle } from '../../client/mushaf-style';
+
+    initMushafStyle();
   </script>
 </Base>
