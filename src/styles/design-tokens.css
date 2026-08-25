@@ -11,7 +11,6 @@
   --font-reader: var(--font-ui);
   --font-arabic-ui: 'NaskhAr', 'AmiriQuran', serif;
   --font-arabic-reader: var(--ar-font, 'Mushaf'), 'AmiriQuran', serif;
-  --font-arabic-mushaf: var(--mushaf-page-font, var(--ar-font, 'Mushaf')), 'AmiriQuran', serif;
 
   --text-xs: 11px;
   --text-sm: 12px;

@@ -170,6 +170,10 @@
   } catch (e) {}
 
   layoutMushaf(null);
+  // стиль мусхафа пересобирает лист — пересчитываем посадку и зум
+  document.addEventListener('mushaf:relayout', function () {
+    layoutMushaf(null);
+  });
   window.addEventListener('resize', function () {
     layoutMushaf(preserveCenter());
   }, { passive: true });

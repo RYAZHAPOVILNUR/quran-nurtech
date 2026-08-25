@@ -36,6 +36,7 @@ export const K = {
   memrep: 'q_memrep',
   transShow: 'q_trans',
   tajweed: 'q_tajweed',
+  mushafStyle: 'q_mushaf_style',
 };
 
 export const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) =>
