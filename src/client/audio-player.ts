@@ -13,6 +13,8 @@ import { $, $$, K, LS, toast } from './shared';
 import { markMenu } from './ui-menus';
 
 const DEFAULT_RECITER_ID = 'binhumaid';
+// Мусхаф: аяты размечены по словам (много [data-ayah-key] на аят), страницы дорисовываются при листании.
+const isMushaf = () => document.body.getAttribute('data-page-mode') === 'mushaf';
 
 export interface Track {
   s: number;
@@ -36,6 +38,9 @@ export class AudioPlayerController {
   memCount = 0;
   preloader: HTMLAudioElement | null = null;
   preloadedUrl = '';
+  mushafAyahNotice = false;
+  /** Плейлист собран из целых сур (мусхаф): чтение идёт дальше страницы, а не только по её аятам. */
+  surahMode = false;
 
   setPlayerOpen(open: boolean) {
     this.el?.classList.toggle('show', open);
@@ -53,8 +58,9 @@ export class AudioPlayerController {
 
   init() {
     if (!this.audio) return;
-    this.playlist = $$('[data-ayah-key]').map((el) => {
-      const [s, a] = el.getAttribute('data-ayah-key')!.split(':').map(Number);
+    const keys = new Set($$('[data-ayah-key]').map((el) => el.getAttribute('data-ayah-key')!));
+    this.playlist = Array.from(keys, (k) => {
+      const [s, a] = k.split(':').map(Number);
       return { s, a };
     });
     this.audio.playbackRate = this.speed;
@@ -120,10 +126,22 @@ export class AudioPlayerController {
     return this.playlist.findIndex((t) => t.s === s && t.a === a);
   }
 
-  playKey(s: number, a: number) {
+  /** Все аяты суры — в мусхафе чтение идёт дальше страницы, а мусхаф листается следом. */
+  async surahTracks(s: number): Promise<Track[]> {
+    await loadIndex();
+    const c = surahIndex.find((x) => x.n === s)?.c || 0;
+    return Array.from({ length: c }, (_, i) => ({ s, a: i + 1 }));
+  }
+
+  async playKey(s: number, a: number): Promise<void> {
     const cur = this.idx >= 0 ? this.playlist[this.idx] : null;
     if (cur && cur.s === s && cur.a === a) return this.toggle();
     this.memCount = 0;
+    // в мусхафе на странице только часть суры — читаем суру целиком с этого аята и дальше
+    if (isMushaf() && (!this.surahMode || this.keyIdx(s, a) < 0)) {
+      this.playlist = await this.surahTracks(s);
+      this.surahMode = true;
+    }
     let i = this.keyIdx(s, a);
     if (i < 0) {
       this.playlist = [{ s, a }];
@@ -148,6 +166,16 @@ export class AudioPlayerController {
 
     let r = pickReciterForSurah(r0, t.s);
     if (r.id !== r0.id) toast(`${shortName(r0)} не читал суру — включён ${shortName(r)}`);
+    if (isMushaf() && r.type === 'surah') {
+      // мусхаф подсвечивает звучащий аят и листается следом — нужен чтец с записью по аятам
+      const rs = await loadReciters();
+      const byAyah = rs.find((x) => x.id === 'alafasy') || rs.find((x) => x.type !== 'surah');
+      if (byAyah) {
+        if (!this.mushafAyahNotice) toast(`В мусхафе чтение по аятам: ${shortName(byAyah)}`);
+        this.mushafAyahNotice = true;
+        r = byAyah;
+      }
+    }
     const src = r.type === 'surah' ? surahUrl(r, t.s) : ayahSrc(r, t.s, t.a);
     this.currentReciter = r;
     this.setTitle(t);
@@ -171,8 +199,8 @@ export class AudioPlayerController {
     const ni = this.peekNextIdx();
     if (ni < 0) return;
     const t = this.playlist[ni];
-    const r0 = await this.reciter();
-    const r = pickReciterForSurah(r0, t.s);
+    // в мусхафе чтец мог быть заменён на чтеца по аятам — подгружаем следующий аят у него же
+    const r = isMushaf() && this.currentReciter ? this.currentReciter : pickReciterForSurah(await this.reciter(), t.s);
     if (r.type === 'surah') return;
     const url = ayahSrc(r, t.s, t.a);
     if (this.preloadedUrl === url) return;
@@ -185,8 +213,9 @@ export class AudioPlayerController {
     this.preloader.load();
   }
 
-  toggle() {
+  toggle(): void | Promise<void> {
     if (!this.audio) return;
+    if (this.idx < 0 && isMushaf() && this.playlist[0]) return this.playKey(this.playlist[0].s, this.playlist[0].a);
     if (this.idx < 0) return this.playIdx(0);
     if (this.audio.paused) this.audio.play().catch(() => {});
     else this.audio.pause();
@@ -208,6 +237,7 @@ export class AudioPlayerController {
     this.setPlayerOpen(false);
     this.clearHighlight();
     this.idx = -1;
+    if (isMushaf()) window.dispatchEvent(new CustomEvent('mushaf:audio-ayah', { detail: null }));
   }
 
   onEnded() {
@@ -223,7 +253,14 @@ export class AudioPlayerController {
       return this.playIdx(this.idx + 1);
     }
     if (this.idx < this.playlist.length - 1) this.playIdx(this.idx + 1);
+    else if (isMushaf() && this.playlist[this.idx].s < 114) this.continueNextSurah();
     else this.setIcon(false);
+  }
+
+  async continueNextSurah() {
+    const next = await this.surahTracks(this.playlist[this.idx].s + 1);
+    this.playlist = this.playlist.concat(next);
+    this.playIdx(this.idx + 1);
   }
 
   armRange(btn: Element) {
@@ -318,6 +355,11 @@ export class AudioPlayerController {
 
   highlight(t: Track) {
     this.clearHighlight();
+    if (isMushaf()) {
+      // подсветку и перелистывание к звучащему аяту делает мусхаф (mushaf-reader.ts)
+      window.dispatchEvent(new CustomEvent('mushaf:audio-ayah', { detail: t }));
+      return;
+    }
     const el = $(`[data-ayah-key="${t.s}:${t.a}"]`);
     el?.classList.add('active');
     el?.scrollIntoView({ block: 'center', behavior: 'smooth' });
