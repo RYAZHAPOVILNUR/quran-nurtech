@@ -158,6 +158,7 @@ export function initTranslation() {
     kuliev: 'Кулиев',
     saadi: 'Тафсир',
     abuadel: 'Абу Адель',
+    muyassar: 'Арабский',
     'ibn-kathir': 'Ибн Касир',
   };
   const label = $('[data-tr-current]');

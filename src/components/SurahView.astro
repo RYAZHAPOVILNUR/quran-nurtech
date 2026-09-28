@@ -2,7 +2,7 @@
 import { getSurah, getTafsir, getIbnKathir, getSurahMeta, ref } from '../lib/quran';
 import { icons } from '../lib/icons';
 
-export type TranslationId = 'kuliev' | 'abuadel' | 'saadi' | 'ibn-kathir';
+export type TranslationId = 'kuliev' | 'abuadel' | 'muyassar' | 'saadi' | 'ibn-kathir';
 export interface Props {
   surahId: number;
   translation: TranslationId;
@@ -13,6 +13,7 @@ const surah = getSurah(surahId);
 const meta = getSurahMeta(surahId)!;
 
 const isAbuAdel = translation === 'abuadel';
+const isMuyassar = translation === 'muyassar';
 const isSaadi = translation === 'saadi';
 const isIbnKathir = translation === 'ibn-kathir';
 
@@ -47,6 +48,7 @@ for (const a of surah.a) {
 const labels: Record<TranslationId, string> = {
   kuliev: 'Перевод Кулиева',
   abuadel: 'Перевод Абу Аделя',
+  muyassar: 'التفسير الميسر (арабский)',
   saadi: 'Тафсир ас-Саади',
   'ibn-kathir': 'Тафсир Ибн Касира',
 };
@@ -86,7 +88,7 @@ const arName = surah.na.replace('سُورَةُ ', '');
     class="ayahs"
     data-ayahs
     data-view="all"
-    data-primary={isAbuAdel ? 'abuadel' : 'kuliev'}
+    data-primary={isMuyassar ? 'muyassar' : isAbuAdel ? 'abuadel' : 'kuliev'}
     data-surah-name={surah.nr}
   >
     {surah.bism && <div class="bism">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>}
@@ -119,9 +121,19 @@ const arName = surah.na.replace('سُورَةُ ', '');
               <div class="ar" set:html={ayah.ar} />
               {ayah.tl && <div class="translit">{ayah.tl}</div>}
               <div class="tr-block">
-                <div class="translation tr-kuliev"><span class="tr-lbl">Кулиев</span>{ayah.ru}</div>
-                {ayah.aa && (
-                  <div class="translation tr-abuadel"><span class="tr-lbl">Абу Адель</span>{ayah.aa}</div>
+                {isMuyassar ? (
+                  ayah.mu && (
+                    <div class="translation tr-muyassar" dir="rtl" lang="ar">
+                      <span class="tr-lbl">التفسير الميسر</span>{ayah.mu}
+                    </div>
+                  )
+                ) : (
+                  <>
+                    <div class="translation tr-kuliev"><span class="tr-lbl">Кулиев</span>{ayah.ru}</div>
+                    {ayah.aa && (
+                      <div class="translation tr-abuadel"><span class="tr-lbl">Абу Адель</span>{ayah.aa}</div>
+                    )}
+                  </>
                 )}
               </div>
               {showTafsirToggle && (

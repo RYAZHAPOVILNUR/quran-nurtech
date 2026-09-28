@@ -215,6 +215,16 @@
   overflow-wrap: anywhere;
   word-break: break-word;
 }
+/* التفسير الميسر — ясный смысл аята на арабском (RTL, читаемый насх, крупнее) */
+.tr-muyassar {
+  font-family: var(--font-arabic-ui);
+  direction: rtl;
+  text-align: right;
+  font-size: calc(var(--ru-size) * 1.2);
+  line-height: 2.05;
+  color: var(--ink);
+  word-break: normal;
+}
 .tafsir {
   min-width: 0;
   max-width: 100%;
