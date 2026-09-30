@@ -31,6 +31,49 @@
     document.addEventListener('DOMContentLoaded', qFillContext);
   else qFillContext();
 
+  // Переключатель ЯЗЫКА перевода (Русский / العربية) в шапке — на всех страницах.
+  // Меняет q_tr и открывает суру на выбранном языке (текущую в читалке, иначе
+  // последнюю читанную или Аль-Фатиху). q_tr хранится JSON-строкой (LS.set).
+  function initLang() {
+    function readTr() {
+      var v = document.body.getAttribute('data-tr');
+      if (v) return v;
+      try {
+        return JSON.parse(localStorage.getItem('q_tr') || '"kuliev"');
+      } catch (e) {
+        return 'kuliev';
+      }
+    }
+    var isAr = readTr() === 'muyassar';
+    var label = document.querySelector('[data-lang-current]');
+    if (label) label.textContent = isAr ? 'ع' : 'RU';
+    var btns = document.querySelectorAll('button[data-lang]');
+    for (var i = 0; i < btns.length; i++) {
+      (function (b) {
+        var v = b.getAttribute('data-lang');
+        b.classList.toggle('on', v === 'muyassar' ? isAr : !isAr);
+        b.addEventListener('click', function () {
+          try {
+            localStorage.setItem('q_tr', JSON.stringify(v));
+          } catch (e) {}
+          var sid = document.body.getAttribute('data-surah');
+          if (sid) {
+            location.href = '/surah/' + sid + '/' + v;
+            return;
+          }
+          var s = 1;
+          try {
+            var last = JSON.parse(localStorage.getItem('q_last') || 'null');
+            if (last && last.s) s = last.s;
+          } catch (e) {}
+          location.href = '/surah/' + s + '/' + v;
+        });
+      })(btns[i]);
+    }
+  }
+  if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', initLang);
+  else initLang();
 
   // ⌘, / Ctrl+, — открыть инспектор настроек (как в macOS-приложениях)
   document.addEventListener('keydown', function (e) {
