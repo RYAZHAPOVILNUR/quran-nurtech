@@ -4,14 +4,14 @@ import { icons } from '../../lib/icons';
 
 <!-- Закладки -->
 <div class="menu-wrap" data-menu-wrap>
-  <button class="icon-btn" data-menu-toggle aria-label="Закладки" title="Закладки (B)" set:html={icons.bookmark} />
+  <button class="icon-btn" data-menu-toggle aria-label="Закладки" title="Закладки (B)" data-i18n-title="tb.bookmarks_hint" set:html={icons.bookmark} />
   <div class="menu" data-menu="bookmarks">
-    <h4>Закладки</h4>
+    <h4 data-i18n="tb.bookmarks">Закладки</h4>
     <button class="item hide" type="button" data-bookmark-add>
-      <span class="ui-inline-icon" set:html={icons.bookmark} /> Добавить текущий аят
+      <span class="ui-inline-icon" set:html={icons.bookmark} /> <span data-i18n="tb.bookmark_add">Добавить текущий аят</span>
     </button>
     <div data-bookmark-list>
-      <div class="menu-empty" data-bookmark-empty>
+      <div class="menu-empty" data-bookmark-empty data-i18n="tb.bookmarks_empty">
         Пока пусто. Открой аят и нажми на «флажок» или клавишу B.
       </div>
     </div>

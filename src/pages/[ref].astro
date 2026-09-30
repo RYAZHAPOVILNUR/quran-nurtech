@@ -31,14 +31,14 @@ const description = `${ayah.ru} — Коран, сура «${meta.nr}» аят $
 <Base {title} {description} surahId={sN} ayahId={aN} tr="saadi">
   <div class="container">
     <nav class="crumb">
-      <a href="/">Главная</a><span>›</span>
+      <a href="/" data-i18n="reader.home">Главная</a><span>›</span>
       <a href={`/surah/${sN}`}>{meta.nr}</a><span>›</span>
-      <span>Аят {sN}:{aN}</span>
+      <span><span data-i18n="reader.ayah_word">Аят</span> {sN}:{aN}</span>
     </nav>
 
     <header class="surah-head">
-      <div class="kicker">Сура {sN} «{meta.nr}» · {meta.nm}</div>
-      <h1>Аят {sN}:{aN}</h1>
+      <div class="kicker"><span data-i18n="reader.surah_word">Сура</span> {sN} «{meta.nr}» · {meta.nm}</div>
+      <h1><span data-i18n="reader.ayah_word">Аят</span> {sN}:{aN}</h1>
     </header>
 
     <div class="ayahs" data-ayahs data-view="all">
@@ -46,11 +46,11 @@ const description = `${ayah.ru} — Коран, сура «${meta.nr}» аят $
         <div class="ayah-top">
           <span class="ayah-no">{sN}:{aN}</span>
           <div class="ayah-acts">
-            <button type="button" data-act="play" aria-label="Слушать" title="Слушать" set:html={icons.play} />
-            <button type="button" data-bm={ref(sN, aN)} aria-label="Закладка" title="Закладка" set:html={icons.bookmark} />
-            <button type="button" data-act="copy" aria-label="Копировать" title="Копировать" set:html={icons.copy} />
-            <button type="button" data-act="copy-link" aria-label="Копировать ссылку" title="Ссылка" set:html={icons.share} />
-            <a href={`/surah/${sN}#ayah-${aN}`} aria-label="Открыть в суре" title="Открыть в суре" set:html={icons.book} />
+            <button type="button" data-act="play" aria-label="Слушать" title="Слушать" data-i18n-title="reader.play_title" set:html={icons.play} />
+            <button type="button" data-bm={ref(sN, aN)} aria-label="Закладка" title="Закладка" data-i18n-title="reader.bookmark_title" set:html={icons.bookmark} />
+            <button type="button" data-act="copy" aria-label="Копировать" title="Копировать" data-i18n-title="reader.copy_title" set:html={icons.copy} />
+            <button type="button" data-act="copy-link" aria-label="Копировать ссылку" title="Ссылка" data-i18n-title="reader.link_title" set:html={icons.share} />
+            <a href={`/surah/${sN}#ayah-${aN}`} aria-label="Открыть в суре" title="Открыть в суре" data-i18n-title="reader.open_in_surah" set:html={icons.book} />
           </div>
         </div>
 
@@ -58,33 +58,33 @@ const description = `${ayah.ru} — Коран, сура «${meta.nr}» аят $
 
         {ayah.tl && (
           <div class="translit">
-            <span class="tafsir-label">Транслитерация</span><br />
+            <span class="tafsir-label" data-i18n="reader.translit">Транслитерация</span><br />
             {ayah.tl}
           </div>
         )}
 
         <div class="translation">
-          <span class="tafsir-label">Перевод · Эльмир Кулиев</span><br />
+          <span class="tafsir-label" data-i18n="reader.tr_kuliev">Перевод · Эльмир Кулиев</span><br />
           {ayah.ru}
         </div>
 
         {ayah.aa && (
           <div class="translation">
-            <span class="tafsir-label">Перевод · Абу Адель</span><br />
+            <span class="tafsir-label" data-i18n="reader.tr_abuadel">Перевод · Абу Адель</span><br />
             {ayah.aa}
           </div>
         )}
 
         {taf && (
           <details class="tafsir-details">
-            <summary>Тафсир ас-Саади · аят {sN}:{aN}</summary>
+            <summary><span data-i18n="reader.tafsir_saadi_ayah">Тафсир ас-Саади · аят</span> {sN}:{aN}</summary>
             <div class="tafsir">{taf.x}</div>
           </details>
         )}
 
         {ikTaf && (
           <details class="tafsir-details">
-            <summary>Тафсир Ибн Касира · аят {sN}:{aN}</summary>
+            <summary><span data-i18n="reader.tafsir_ibnkathir_ayah">Тафсир Ибн Касира · аят</span> {sN}:{aN}</summary>
             <div class="tafsir">{ikTaf.x}</div>
           </details>
         )}
@@ -99,7 +99,7 @@ const description = `${ayah.ru} — Коран, сура «${meta.nr}» аят $
       ) : (
         <span />
       )}
-      <a class="btn" href={`/surah/${sN}#ayah-${aN}`}>Открыть в суре</a>
+      <a class="btn" href={`/surah/${sN}#ayah-${aN}`} data-i18n="reader.open_in_surah">Открыть в суре</a>
       {next && (
         <a class="btn" href={`/${next.s}:${next.a}`}>
           {next.s}:{next.a} <span class="ui-inline-icon-sm" set:html={icons.arrowRight} />

@@ -14,22 +14,22 @@ const description =
   <section class="home-head container">
     <div class="home-copy">
       <p class="eyebrow">quran.nurtech.dev</p>
-      <h1>Коран онлайн</h1>
+      <h1 data-i18n="home.title">Коран онлайн</h1>
       <div class="verse">رَبِّ زِدْنِي عِلْمًا</div>
-      <p class="verse-tr">«Господи! Приумножь мои знания» — сура Та Ха, аят 114</p>
+      <p class="verse-tr" data-i18n="home.verse_tr">«Господи! Приумножь мои знания» — сура Та Ха, аят 114</p>
     </div>
     <div class="home-actions">
       <a class="btn primary" href="/surah/1" data-continue-home>
-        <span class="ui-inline-icon" set:html={icons.book} /> Начать чтение
+        <span class="ui-inline-icon" set:html={icons.book} /> <span data-i18n="home.start">Начать чтение</span>
       </a>
       <a class="btn" href="/mushaf/1">
-        <span class="ui-inline-icon" set:html={icons.book} /> Мусхаф
+        <span class="ui-inline-icon" set:html={icons.book} /> <span data-i18n="home.mushaf">Мусхаф</span>
       </a>
       <a class="btn" href="/search">
-        <span class="ui-inline-icon" set:html={icons.search} /> Поиск
+        <span class="ui-inline-icon" set:html={icons.search} /> <span data-i18n="home.search">Поиск</span>
       </a>
       <a class="btn" href="/audio">
-        <span class="ui-inline-icon" set:html={icons.headphones} /> Аудио
+        <span class="ui-inline-icon" set:html={icons.headphones} /> <span data-i18n="home.audio">Аудио</span>
       </a>
     </div>
   </section>
@@ -54,6 +54,7 @@ const description =
         class="filter"
         type="text"
         placeholder="Найти суру по названию или номеру…"
+        data-i18n-ph="home.find_surah_ph"
         data-home-filter
         aria-label="Фильтр сур"
       />
@@ -79,9 +80,9 @@ const description =
               <div class="row2">
                 <span class="m">{s.nm} · {s.c} аят.</span>
                 <span class="acts">
-                  <a href={`/surah/${s.n}/kuliev`} aria-label={`Читать суру ${s.nr}`} title="Читать" set:html={icons.book} />
-                  <a href={`/audio?s=${s.n}`} aria-label={`Слушать суру ${s.nr}`} title="Слушать" set:html={icons.headphones} />
-                  <a href={`/surah/${s.n}/saadi`} aria-label={`Изучать тафсир суры ${s.nr}`} title="Изучать (тафсир)" set:html={icons.study} />
+                  <a href={`/surah/${s.n}/kuliev`} aria-label={`Читать суру ${s.nr}`} title="Читать" data-i18n-title="act.read" set:html={icons.book} />
+                  <a href={`/audio?s=${s.n}`} aria-label={`Слушать суру ${s.nr}`} title="Слушать" data-i18n-title="act.listen" set:html={icons.headphones} />
+                  <a href={`/surah/${s.n}/saadi`} aria-label={`Изучать тафсир суры ${s.nr}`} title="Изучать (тафсир)" data-i18n-title="act.study" set:html={icons.study} />
                 </span>
               </div>
             </div>

@@ -27,6 +27,7 @@ const svgTasbih =
     <input
       type="text"
       placeholder="Поиск суры…"
+      data-i18n-ph="nav.find_surah_ph"
       data-drawer-filter
       aria-label="Поиск суры"
       inputmode="search"
@@ -38,38 +39,38 @@ const svgTasbih =
 
   <div class="dscroll">
     <nav class="dgroup" aria-label="Чтение">
-      <div class="dgroup-title">Чтение</div>
+      <div class="dgroup-title" data-i18n="nav.reading">Чтение</div>
       <ListRow class={on('/progress')} href="/progress" aria-current={on('/progress') ? 'page' : undefined}>
-        <span class="di" set:html={icons.study} />Мой прогресс
+        <span class="di" set:html={icons.study} /><span data-i18n="nav.progress">Мой прогресс</span>
       </ListRow>
       <ListRow class={on('/bookmarks')} href="/bookmarks" aria-current={on('/bookmarks') ? 'page' : undefined}>
-        <span class="di" set:html={icons.bookmark} />Закладки
+        <span class="di" set:html={icons.bookmark} /><span data-i18n="nav.bookmarks">Закладки</span>
       </ListRow>
       <ListRow data-continue href="/surah/1">
-        <span class="di" set:html={icons.continue} />Продолжить
+        <span class="di" set:html={icons.continue} /><span data-i18n="nav.continue">Продолжить</span>
       </ListRow>
     </nav>
 
     <nav class="dgroup" aria-label="Разделы">
-      <div class="dgroup-title">Разделы</div>
+      <div class="dgroup-title" data-i18n="nav.sections">Разделы</div>
       <ListRow class={on('/mushaf')} href={mushafHref} aria-current={on('/mushaf') ? 'page' : undefined}>
-        <span class="di" set:html={icons.book} />Мусхаф
+        <span class="di" set:html={icons.book} /><span data-i18n="nav.mushaf">Мусхаф</span>
       </ListRow>
       <ListRow class={on('/topics')} href="/topics" aria-current={on('/topics') ? 'page' : undefined}>
-        <span class="di" set:html={svgTopics} />Аяты по темам
+        <span class="di" set:html={svgTopics} /><span data-i18n="nav.topics">Аяты по темам</span>
       </ListRow>
       <ListRow class={on('/glossary')} href="/glossary" aria-current={on('/glossary') ? 'page' : undefined}>
-        <span class="di" set:html={svgGlossary} />Словарь терминов
+        <span class="di" set:html={svgGlossary} /><span data-i18n="nav.glossary">Словарь терминов</span>
       </ListRow>
       <ListRow class={on('/tasbih')} href="/tasbih" aria-current={on('/tasbih') ? 'page' : undefined}>
-        <span class="di" set:html={svgTasbih} />Тасбих
+        <span class="di" set:html={svgTasbih} /><span data-i18n="nav.tasbih">Тасбих</span>
       </ListRow>
       <ListRow class={on('/search')} href="/search" aria-current={on('/search') ? 'page' : undefined}>
-        <span class="di" set:html={icons.search} />Поиск по Корану
+        <span class="di" set:html={icons.search} /><span data-i18n="nav.search">Поиск по Корану</span>
       </ListRow>
     </nav>
 
-    <div class="dgroup-title dgt-list">Суры Корана</div>
+    <div class="dgroup-title dgt-list" data-i18n="nav.surahs">Суры Корана</div>
     <SegmentedControl
       class="dtabs"
       options={[
@@ -86,10 +87,10 @@ const svgTasbih =
 
   <div class="dfoot">
     <ListRow class={on('/backup')} href="/backup" aria-current={on('/backup') ? 'page' : undefined}>
-      <span class="di" set:html={icons.download} />Резервная копия
+      <span class="di" set:html={icons.download} /><span data-i18n="nav.backup">Резервная копия</span>
     </ListRow>
     <ListRow class={on('/about')} href="/about">
-      <span class="di" set:html={icons.details} />О проекте
+      <span class="di" set:html={icons.details} /><span data-i18n="nav.about">О проекте</span>
     </ListRow>
   </div>
 </aside>

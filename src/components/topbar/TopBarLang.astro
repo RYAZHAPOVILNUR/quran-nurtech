@@ -1,30 +1,29 @@
 ---
-// Глобальный переключатель ЯЗЫКА перевода (виден на всех страницах, в шапке).
-// Русский (перевод Кулиева) ↔ Арабский (التفسير الميسر / аль-Муяссар).
-// Обработчик — client/topbar.ts (initLang): сохраняет q_tr и открывает суру на выбранном языке.
+// Глобальный переключатель ЛОКАЛИ интерфейса (виден на всех страницах).
+// Русский (LTR) ↔ العربية (RTL, весь интерфейс + смысл аятов на арабском).
+// Обработчик — client/i18n.ts (initLocaleSwitch).
 import { icons } from '../../lib/icons';
 ---
 
 <div class="menu-wrap lang-switch" data-menu-wrap>
-  <button class="icon-btn lang-btn" data-menu-toggle aria-haspopup="true" aria-label="Язык перевода" title="Язык перевода / اللغة">
+  <button class="icon-btn lang-btn" data-menu-toggle aria-haspopup="true" aria-label="Язык интерфейса / اللغة" title="Язык / اللغة" data-i18n-title="lang.title">
     <span class="ui-inline-icon-xs" set:html={icons.globe} />
     <span class="lang-cur" data-lang-current>RU</span>
   </button>
   <div class="menu menu-lang" data-menu="lang">
-    <h4>Язык перевода</h4>
-    <button class="item" type="button" data-lang="kuliev">
-      Русский <span class="lang-sub">· Кулиев</span>
+    <h4 data-i18n="lang.title">Язык</h4>
+    <button class="item" type="button" data-locale-set="ru">
+      Русский
       <span class="tick">✓</span>
     </button>
-    <button class="item lang-ar" type="button" data-lang="muyassar" dir="rtl" lang="ar">
-      العربية <span class="lang-sub">· التفسير الميسر</span>
+    <button class="item lang-ar" type="button" data-locale-set="ar" dir="rtl" lang="ar">
+      العربية
       <span class="tick">✓</span>
     </button>
   </div>
 </div>
 
 <style is:global>
-  /* Переключатель языка в шапке: глобус + метка RU/ع, авто-ширина */
   .lang-switch .lang-btn {
     width: auto;
     min-width: 0;
@@ -36,19 +35,12 @@ import { icons } from '../../lib/icons';
     letter-spacing: 0.02em;
   }
   .menu-lang {
-    min-width: 220px;
-  }
-  .menu-lang .lang-sub {
-    color: var(--ink-faint);
-    font-weight: 400;
+    min-width: 180px;
   }
   .menu-lang .lang-ar {
     direction: rtl;
     text-align: right;
     font-family: var(--font-arabic-ui);
     font-size: 15px;
-  }
-  .menu-lang .lang-ar .lang-sub {
-    font-size: 13px;
   }
 </style>

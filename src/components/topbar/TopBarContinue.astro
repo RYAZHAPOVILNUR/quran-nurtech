@@ -8,8 +8,8 @@ const { isReader } = Astro.props;
 
 <!-- Продолжить (прячется на reader-страницах и мобиле) -->
 {!isReader && (
-  <a class="btn ghost hide t-opt" data-continue href="#" title="Последнее место чтения">
+  <a class="btn ghost hide t-opt" data-continue href="#" title="Последнее место чтения" data-i18n-title="tb.continue_hint">
     <span class="ui-inline-icon" set:html={icons.continue} />
-    <span class="desktop-only">Продолжить</span>
+    <span class="desktop-only" data-i18n="tb.continue">Продолжить</span>
   </a>
 )}

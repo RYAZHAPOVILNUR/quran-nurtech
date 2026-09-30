@@ -60,23 +60,23 @@ const arName = surah.na.replace('سُورَةُ ', '');
 
 <div class="container">
   <nav class="crumb">
-    <a href="/">Главная</a><span>›</span><span>Сура {surah.n}</span><span>›</span>
+    <a href="/" data-i18n="reader.home">Главная</a><span>›</span><span><span data-i18n="reader.surah_word">Сура</span> {surah.n}</span><span>›</span>
     <span>{surah.nr}</span>
   </nav>
 
   <header class="surah-head">
-    <div class="kicker">Сура №{surah.n} · {surah.nm}</div>
+    <div class="kicker"><span data-i18n="reader.surah_no">Сура №</span>{surah.n} · {surah.nm}</div>
     <h1>{surah.nr}</h1>
     <div class="ar">{arName}</div>
     <div class="meta">
       <span class={`chip ${isMecca ? 'mecca' : 'medina'}`}>{meta.t}</span>
-      <span class="chip">{surah.c} аятов</span>
+      <span class="chip">{surah.c} <span data-i18n="reader.ayahs_word">аятов</span></span>
       <span class="chip">{labels[translation]}</span>
     </div>
   </header>
 
   <details class="surah-desc">
-    <summary>Описание суры и режима чтения</summary>
+    <summary data-i18n="reader.surah_desc_summary">Описание суры и режима чтения</summary>
     <p>
       <strong>{surah.nr}</strong> ({surah.nm}) — {meta.t} сура Корана под номером {surah.n},
       состоит из {surah.c} аятов. Ниже приведён арабский текст (Усмани) и {labels[translation].toLowerCase()}.
@@ -101,21 +101,21 @@ const arName = surah.na.replace('سُورَةُ ', '');
           <>
             {juzAt[ayah.n] && (
               <div class="juz-sep" id={`juz-${juzAt[ayah.n]}`}>
-                <span>Джуз {juzAt[ayah.n]}</span>
+                <span><span data-i18n="reader.juz_word">Джуз</span> {juzAt[ayah.n]}</span>
               </div>
             )}
             {pageAt[ayah.n] && !juzAt[ayah.n] && (
-              <div class="page-sep">Страница {pageAt[ayah.n]}</div>
+              <div class="page-sep"><span data-i18n="reader.page_word">Страница</span> {pageAt[ayah.n]}</div>
             )}
             <article class="ayah" id={`ayah-${ayah.n}`} data-ayah-key={ref(surah.n, ayah.n)}>
               <div class="ayah-top">
-                <a class="ayah-no" href={`/${surah.n}:${ayah.n}`} title="Открыть аят">{surah.n}:{ayah.n}</a>
+                <a class="ayah-no" href={`/${surah.n}:${ayah.n}`} title="Открыть аят" data-i18n-title="reader.open_ayah_title">{surah.n}:{ayah.n}</a>
                 <div class="ayah-acts">
-                  <button type="button" data-act="play" aria-label="Слушать аят" title="Слушать" set:html={icons.play} />
-                  <button type="button" data-bm={ref(surah.n, ayah.n)} aria-label="В закладки" title="Закладка" set:html={icons.bookmark} />
-                  <button class="secondary-action" type="button" data-act="copy" aria-label="Копировать" title="Копировать" set:html={icons.copy} />
-                  <button class="secondary-action" type="button" data-act="share" aria-label="Поделиться" title="Поделиться" set:html={icons.share} />
-                  <a href={`/${surah.n}:${ayah.n}`} aria-label="Открыть аят" title="Открыть аят" set:html={icons.details} />
+                  <button type="button" data-act="play" aria-label="Слушать аят" title="Слушать" data-i18n-title="reader.play_title" set:html={icons.play} />
+                  <button type="button" data-bm={ref(surah.n, ayah.n)} aria-label="В закладки" title="Закладка" data-i18n-title="reader.bookmark_title" set:html={icons.bookmark} />
+                  <button class="secondary-action" type="button" data-act="copy" aria-label="Копировать" title="Копировать" data-i18n-title="reader.copy_title" set:html={icons.copy} />
+                  <button class="secondary-action" type="button" data-act="share" aria-label="Поделиться" title="Поделиться" data-i18n-title="reader.share_title" set:html={icons.share} />
+                  <a href={`/${surah.n}:${ayah.n}`} aria-label="Открыть аят" title="Открыть аят" data-i18n-title="reader.open_ayah_title" set:html={icons.details} />
                 </div>
               </div>
               <div class="ar" set:html={ayah.ar} />
@@ -129,36 +129,36 @@ const arName = surah.na.replace('سُورَةُ ', '');
                   )
                 ) : (
                   <>
-                    <div class="translation tr-kuliev"><span class="tr-lbl">Кулиев</span>{ayah.ru}</div>
+                    <div class="translation tr-kuliev"><span class="tr-lbl" data-i18n="reader.lbl_kuliev">Кулиев</span>{ayah.ru}</div>
                     {ayah.aa && (
-                      <div class="translation tr-abuadel"><span class="tr-lbl">Абу Адель</span>{ayah.aa}</div>
+                      <div class="translation tr-abuadel"><span class="tr-lbl" data-i18n="reader.lbl_abuadel">Абу Адель</span>{ayah.aa}</div>
                     )}
                   </>
                 )}
               </div>
               {showTafsirToggle && (
                 <div class="tafsir-toggles">
-                  <button class="tafsir-toggle" type="button" data-act="tafsir" data-src="saadi" aria-expanded="false" title="Тафсир ас-Саади">
+                  <button class="tafsir-toggle" type="button" data-act="tafsir" data-src="saadi" aria-expanded="false" title="Тафсир ас-Саади" data-i18n-title="reader.tafsir_saadi">
                     <span class="tt-ic" set:html={icons.book} />
-                    <span class="tt-tx">Тафсир ас-Саади</span>
+                    <span class="tt-tx" data-i18n="reader.tafsir_saadi">Тафсир ас-Саади</span>
                     <span class="tt-caret" set:html={icons.chevron} />
                   </button>
-                  <button class="tafsir-toggle" type="button" data-act="tafsir" data-src="ik" aria-expanded="false" title="Тафсир Ибн Касира">
+                  <button class="tafsir-toggle" type="button" data-act="tafsir" data-src="ik" aria-expanded="false" title="Тафсир Ибн Касира" data-i18n-title="reader.tafsir_ibnkathir">
                     <span class="tt-ic" set:html={icons.book} />
-                    <span class="tt-tx">Тафсир Ибн Касира</span>
+                    <span class="tt-tx" data-i18n="reader.tafsir_ibnkathir">Тафсир Ибн Касира</span>
                     <span class="tt-caret" set:html={icons.chevron} />
                   </button>
                 </div>
               )}
               {saadiBlk && (
                 <div class="tafsir-passage">
-                  <span class="tafsir-label">Тафсир ас-Саади · аят {surah.n}:{ayah.n}</span>
+                  <span class="tafsir-label"><span data-i18n="reader.tafsir_saadi_ayah">Тафсир ас-Саади · аят</span> {surah.n}:{ayah.n}</span>
                   <div class="tafsir">{saadiBlk.x}</div>
                 </div>
               )}
               {ikBlk && (
                 <details class="tafsir-details">
-                  <summary>Тафсир Ибн Касира · аят {surah.n}:{ayah.n}</summary>
+                  <summary><span data-i18n="reader.tafsir_ibnkathir_ayah">Тафсир Ибн Касира · аят</span> {surah.n}:{ayah.n}</summary>
                   <div class="tafsir">{ikBlk.x}</div>
                 </details>
               )}
@@ -172,14 +172,14 @@ const arName = surah.na.replace('سُورَةُ ', '');
   <nav class="ayah-nav">
     {prevN ? (
       <a class="btn" href={`/surah/${prevN}`}>
-        <span class="ui-inline-icon-sm" set:html={icons.arrowLeft} /> Пред. сура
+        <span class="ui-inline-icon-sm" set:html={icons.arrowLeft} /> <span data-i18n="reader.prev_surah">Пред. сура</span>
       </a>
     ) : (
       <span />
     )}
     {nextN && (
       <a class="btn" href={`/surah/${nextN}`}>
-        След. сура <span class="ui-inline-icon-sm" set:html={icons.arrowRight} />
+        <span data-i18n="reader.next_surah">След. сура</span> <span class="ui-inline-icon-sm" set:html={icons.arrowRight} />
       </a>
     )}
   </nav>
