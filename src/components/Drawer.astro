@@ -136,6 +136,15 @@ const svgTasbih =
   </div>
 
   <div class="dfoot">
+    <nav class="dgroup" aria-label="Язык интерфейса">
+      <div class="dgroup-title" data-i18n="lang.title">Язык</div>
+      <ListRow data-locale-set="ru" tick>
+        <span>Русский</span>
+      </ListRow>
+      <ListRow data-locale-set="ar" class="lang-ar" tick>
+        <span dir="rtl" lang="ar">العربية</span>
+      </ListRow>
+    </nav>
     <ListRow class={on('/backup')} href="/backup" aria-current={on('/backup') ? 'page' : undefined}>
       <span class="di" set:html={icons.download} /><span data-i18n="nav.backup">Резервная копия</span>
     </ListRow>
