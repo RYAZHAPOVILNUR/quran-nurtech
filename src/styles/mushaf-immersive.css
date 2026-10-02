@@ -57,6 +57,7 @@ body.mushaf-immersive .mushaf-reader {
   align-items: center;
   justify-items: center;
   place-items: center;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr);
   overflow: hidden;
   background: var(--mushaf-stage);
