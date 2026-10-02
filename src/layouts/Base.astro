@@ -4,6 +4,7 @@ import '../styles/global.css';
 import '../styles/utilities.css';
 import '../styles/component-primitives.css';
 import '../styles/component-controls.css';
+import '../styles/component-selects.css';
 import '../styles/component-segmented.css';
 import '../styles/component-lists.css';
 import '../styles/component-switches.css';
@@ -118,6 +119,7 @@ const tab = (name: 'home' | 'read' | 'mushaf' | 'search') => {
     <link rel="icon" href="/favicon.png?v=g2" type="image/png" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=g2" />
+    <link rel="preload" href="/brand-mark.png?v=g2" as="image" fetchpriority="high" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Коран" />
@@ -138,6 +140,12 @@ const tab = (name: 'home' | 'read' | 'mushaf' | 'search') => {
           var eff = t;
           if (t === 'system')
             eff = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          if (/^\/mushaf\//.test(location.pathname)) {
+            var mushafStyle = localStorage.getItem('q_mushaf_style');
+            if (mushafStyle === 'dark') eff = 'dark';
+            else if (mushafStyle === 'paper') eff = 'sepia';
+            else if (mushafStyle === 'light') eff = 'light';
+          }
           document.documentElement.setAttribute('data-theme', eff);
           var r = JSON.parse(localStorage.getItem('q_read') || '{}');
           var el = document.documentElement.style;
@@ -145,9 +153,49 @@ const tab = (name: 'home' | 'read' | 'mushaf' | 'search') => {
           if (r.ru) el.setProperty('--ru-size', r.ru + 'px');
           if (r.lh) el.setProperty('--lh', r.lh);
           if (r.font) el.setProperty('--ar-font', r.font);
+          if (/^(\/surah\/|\/ayah\/|\/\d+:\d+)/.test(location.pathname)) {
+            var layers = JSON.parse(localStorage.getItem('q_layers') || '{}');
+            layers.ar = layers.ar !== false;
+            layers.tr = layers.tr !== false;
+            layers.tl = true;
+            localStorage.setItem('q_layers', JSON.stringify(layers));
+          }
+          var plainSurah = location.pathname.match(/^\/surah\/(\d+)\/?$/);
+          if (plainSurah) {
+            var savedTr = localStorage.getItem('q_tr');
+            if (savedTr) {
+              try {
+                savedTr = JSON.parse(savedTr);
+              } catch (e) {}
+            }
+            if (/^(abuadel|saadi|ibn-kathir)$/.test(savedTr || '')) {
+              location.replace('/surah/' + plainSurah[1] + '/' + savedTr);
+              return;
+            }
+          }
           var sidebar = localStorage.getItem('q_sidebar');
-          if (sidebar === 'closed' || sidebar === 'open')
+          if (/^\/mushaf\/\d+/.test(location.pathname)) {
+            if (sidebar === 'open') localStorage.setItem('q_sidebar', 'closed');
+            document.documentElement.setAttribute('data-sidebar', 'closed');
+            var vw = Math.max(320, window.innerWidth || 0);
+            var vh = Math.max(360, window.innerHeight || 0);
+            var mobile = vw <= 650;
+            var availableWidth = vw - (mobile ? 56 : 88);
+            var availableHeight = vh - (mobile ? 66 : vw >= 900 ? 225 : 246);
+            var maxWidth = mobile ? 620 : 760;
+            var pageWidth = Math.floor(Math.min(availableWidth, availableHeight * 0.704, maxWidth));
+            pageWidth = Math.max(1, pageWidth);
+            el.setProperty('--mushaf-vvh', vh + 'px');
+            el.setProperty('--mushaf-page-w', pageWidth + 'px');
+            el.setProperty('--mushaf-page-zoom', '1');
+            el.setProperty('--mushaf-qcf-fit', '1');
+            var qcfRatio = mobile ? 0.05 : 0.052;
+            var qcfMin = mobile ? 12.5 : 20;
+            var qcfMax = mobile ? 29 : 44;
+            el.setProperty('--mushaf-qcf-size', Math.max(qcfMin, Math.min(qcfMax, pageWidth * qcfRatio)).toFixed(2) + 'px');
+          } else if (sidebar === 'closed' || sidebar === 'open') {
             document.documentElement.setAttribute('data-sidebar', sidebar);
+          }
           var loc = 'ru';
           try {
             loc = JSON.parse(localStorage.getItem('q_locale') || '"ru"');
@@ -163,18 +211,36 @@ const tab = (name: 'home' | 'read' | 'mushaf' | 'search') => {
     <!-- PWA: офлайн-доступ -->
     <script is:inline>
       if ('serviceWorker' in navigator) {
-        addEventListener('load', function () {
-          var host = location.hostname;
-          if (host === 'localhost' || host === '127.0.0.1' || host === '[::1]') {
-            navigator.serviceWorker.getRegistrations().then(function (items) {
-              items.forEach(function (item) {
-                item.unregister();
-              });
+        (function () {
+          var isLocal = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+          if (isLocal) {
+            addEventListener('load', function () {
+              Promise.all([
+                navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                  return Promise.all(registrations.map(function (registration) {
+                    return registration.unregister();
+                  }));
+                }),
+                'caches' in window
+                  ? caches.keys().then(function (keys) {
+                      return Promise.all(keys.map(function (key) { return caches.delete(key); }));
+                    })
+                  : Promise.resolve(),
+              ]).then(function () {
+                if (navigator.serviceWorker.controller && !sessionStorage.getItem('q_local_sw_reset')) {
+                  sessionStorage.setItem('q_local_sw_reset', '1');
+                  location.reload();
+                } else {
+                  sessionStorage.removeItem('q_local_sw_reset');
+                }
+              }).catch(function () {});
             });
             return;
           }
-          navigator.serviceWorker.register('/sw.js?v=drawer-tabs-macos-20260715').catch(function () {});
-        });
+          addEventListener('load', function () {
+            navigator.serviceWorker.register('/sw.js?v=mushaf-sajda-flow-2').catch(function () {});
+          });
+        })();
       }
     </script>
   </head>

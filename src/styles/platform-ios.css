@@ -30,14 +30,46 @@
     box-shadow: 0 10px 28px -24px rgba(0, 0, 0, 0.32);
   }
 
-  .topbar-inner .brand,
   .topbar-title,
   .toolbar-context {
     display: none !important;
   }
 
+  .topbar-inner .brand {
+    display: flex;
+    flex: 0 1 182px;
+    min-width: 132px;
+    max-width: 190px;
+    overflow: hidden;
+  }
+
+  .topbar-inner .brand-copy {
+    display: grid;
+    min-width: 0;
+  }
+
+  .topbar-inner .brand-name,
+  .topbar-inner .brand-domain {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .topbar-inner .only-mobile {
     display: inline-grid;
+  }
+
+  .topbar-inner [data-act='drawer'].only-mobile {
+    flex: 0 0 var(--touch-h);
+    width: var(--touch-h);
+    min-width: var(--touch-h);
+    height: var(--touch-h);
+    place-items: center;
+    border: 1px solid var(--sys-separator);
+    border-radius: 15px;
+    background: var(--sys-fill);
+    color: var(--sys-secondary-label);
   }
 
   .topbar-inner > a.icon-btn[aria-label='Мусхаф'],
@@ -64,6 +96,16 @@
     width: var(--touch-h);
     height: var(--touch-h);
     border-radius: 15px;
+  }
+
+  .topbar-inner [data-act='drawer'].only-mobile svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .topbar-cluster > .desktop-comfort,
+  .topbar-cluster > .menu-wrap:not(.settings-menu-wrap) {
+    display: none !important;
   }
 
   .mobile-tabbar {
@@ -164,6 +206,27 @@
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--ink) 28%, transparent) transparent;
+    background: transparent;
+  }
+
+  .drawer .dscroll::-webkit-scrollbar {
+    width: 6px;
+    background: transparent;
+  }
+
+  .drawer .dscroll::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+
+  .drawer .dscroll::-webkit-scrollbar-thumb {
+    min-height: 44px;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background:
+      linear-gradient(color-mix(in srgb, var(--ink) 28%, transparent), color-mix(in srgb, var(--ink) 28%, transparent))
+      content-box;
   }
 
   .drawer .dgroup a,
@@ -175,6 +238,8 @@
   }
 
   .menu[data-menu='settings'] {
+    --settings-scrollbar-track: var(--sys-secondary-grouped-bg);
+    --settings-scrollbar-thumb: color-mix(in srgb, var(--ink) 22%, transparent);
     position: fixed;
     top: auto;
     right: 0;
@@ -184,28 +249,76 @@
     max-height: min(88dvh, calc(100dvh - max(16px, env(safe-area-inset-top))));
     border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
     background: var(--sys-secondary-grouped-bg);
-    transform: translateY(105%);
-    overflow-x: hidden;
-    overflow-y: auto;
+    transform: translateY(calc(105% + var(--settings-drag-y, 0px)));
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
   }
 
   .menu[data-menu='settings'].open {
-    transform: translateY(0);
+    transform: translateY(var(--settings-drag-y, 0px));
   }
 
   .menu[data-menu='settings'] .settings-panel-head {
-    padding: 16px 18px 13px;
+    flex: none;
+    position: relative;
+    padding: 22px 18px 13px;
     background: var(--sys-material-strong);
   }
 
+  .menu[data-menu='settings'] .settings-panel-head::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    width: 36px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--line);
+    opacity: 0.9;
+    transform: translateX(-50%);
+  }
+
   .menu[data-menu='settings'] .settings-panel-body {
+    flex: 1 1 auto;
+    min-height: 0;
     max-height: none;
     gap: 18px;
     padding: 14px 16px calc(22px + env(safe-area-inset-bottom));
-    overflow: visible;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--settings-scrollbar-thumb) transparent;
+  }
+
+  .menu[data-menu='settings'] .settings-panel-body::-webkit-scrollbar {
+    width: 4px;
+    background: transparent !important;
+  }
+
+  .menu[data-menu='settings'] .settings-panel-body::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  .menu[data-menu='settings'] .settings-panel-body::-webkit-scrollbar-track,
+  .menu[data-menu='settings'] .settings-panel-body::-webkit-scrollbar-track-piece {
+    margin-block: 8px;
+    background: transparent !important;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .menu[data-menu='settings'] .settings-panel-body::-webkit-scrollbar-thumb {
+    min-height: 44px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--settings-scrollbar-thumb) !important;
   }
 
   .menu[data-menu='settings'] .settings-row,

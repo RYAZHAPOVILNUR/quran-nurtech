@@ -11,6 +11,40 @@ body[data-page-mode='mushaf'].mushaf-zoomed .qcf-page {
   touch-action: none;
 }
 
+body[data-page-mode='mushaf'].mushaf-zoomed .qcf-line {
+  left: var(--qcf-line-shift, 0px) !important;
+}
+
+body[data-page-mode='mushaf'].mushaf-zoomed .mushaf-reader {
+  width: 100%;
+  max-width: calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right) - 12px);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: safe center;
+  justify-content: flex-start;
+  gap: 18px;
+  padding-bottom: max(34px, calc(22px + env(safe-area-inset-bottom)));
+  overflow: auto;
+  scrollbar-gutter: stable both-edges;
+}
+
+body[data-page-mode='mushaf'].mushaf-zoomed .mushaf-sheet {
+  flex: 0 0 auto;
+  justify-self: safe center;
+}
+
+body[data-page-mode='mushaf'].mushaf-zoomed .mushaf-bottom {
+  position: relative;
+  flex: 0 0 auto;
+  z-index: 2;
+  width: fit-content;
+  max-width: calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right) - 24px);
+  margin: 0 auto;
+  padding-bottom: env(safe-area-inset-bottom);
+  justify-self: center;
+}
+
 /* floating compact zoom control (shown on mobile where the toolbar slider is hidden) */
 body[data-page-mode='mushaf'] .mushaf-zoom-fab {
   display: none;
@@ -46,4 +80,17 @@ body[data-page-mode='mushaf'] .mushaf-zoom-fab .mushaf-fab-reset {
   color: var(--sys-secondary-label);
   font: var(--weight-strong) var(--text-xs) / 1 var(--font-ui);
   font-variant-numeric: tabular-nums;
+}
+
+/* Mobile action surface is fixed to the viewport and never participates in
+   Mushaf grid sizing. It is revealed only after an intentional page tap. */
+body[data-page-mode='mushaf'] .mushaf-mobile-controls {
+  display: none;
+}
+
+body[data-page-mode='mushaf'] .mushaf-mobile-fab,
+body[data-page-mode='mushaf'] .mushaf-mobile-action,
+body[data-page-mode='mushaf'] .mushaf-mobile-page-btn {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }

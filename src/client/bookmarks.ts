@@ -19,6 +19,7 @@ export function toggleBookmark(s: number, a: number): boolean {
   LS.set(K.bookmarks, list);
   renderBookmarks();
   syncBookmarkButtons();
+  window.dispatchEvent(new CustomEvent('quran:bookmark-state', { detail: { key: k, on: i < 0 } }));
   return i < 0;
 }
 
@@ -74,13 +75,22 @@ function rememberLast() {
 
 export function initContinue() {
   const btn = $<HTMLAnchorElement>('[data-continue]');
+  const mushaf = LS.get<{ page: number; ayah?: string | null } | null>(K.mushafLast, null);
   const readpos = LS.get<{ s: number; a: number } | null>(K.readpos, null);
   const last = LS.get<{ s: number; a: number } | null>(K.last, null);
   const pos = readpos && readpos.s ? readpos : last;
-  if (btn && pos && pos.s) {
-    btn.href = `/surah/${pos.s}#ayah-${pos.a}`;
+  if (btn && mushaf?.page) {
+    btn.href = `/mushaf/${mushaf.page}${mushaf.ayah ? `?ayah=${encodeURIComponent(mushaf.ayah)}` : ''}`;
     btn.classList.remove('hide');
-    btn.title = `Продолжить: сура ${pos.s}, аят ${pos.a}`;
+    btn.title = `Продолжить: страница ${mushaf.page}`;
+    rememberLast();
+    return;
+  }
+  if (btn && pos && pos.s) {
+    const ayah = pos.a || 1;
+    btn.href = `/surah/${pos.s}#ayah-${ayah}`;
+    btn.classList.remove('hide');
+    btn.title = `Продолжить: сура ${pos.s}, аят ${ayah}`;
   }
   rememberLast();
 }

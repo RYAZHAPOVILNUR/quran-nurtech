@@ -1,0 +1,123 @@
+[
+  {
+    "buttonVisible": true,
+    "height": 740,
+    "immersive": true,
+    "overflow": false,
+    "overlaps": 0,
+    "page": "/mushaf/604",
+    "style": "paper",
+    "width": 320,
+    "wordCount": 73
+  },
+  {
+    "buttonVisible": true,
+    "height": 740,
+    "immersive": true,
+    "overflow": false,
+    "overlaps": 0,
+    "page": "/mushaf/604",
+    "style": "light",
+    "width": 320,
+    "wordCount": 73
+  },
+  {
+    "buttonVisible": true,
+    "height": 812,
+    "immersive": true,
+    "overflow": false,
+    "overlaps": 0,
+    "page": "/mushaf/604",
+    "style": "dark",
+    "width": 375,
+    "wordCount": 73
+  },
+  {
+    "buttonVisible": true,
+    "height": 812,
+    "immersive": true,
+    "overflow": false,
+    "overlaps": 0,
+    "page": "/mushaf/604",
+    "style": "paper",
+    "width": 375,
+    "wordCount": 73
+  },
+  {
+    "buttonVisible": true,
+    "height": 812,
+    "immersive": true,
+    "overflow": false,
+    "overlaps": 0,
+    "page": "/mushaf/604",
+    "style": "light",
+    "width": 375,
+    "wordCount": 73
+  },
+  {
+    "buttonVisible": true,
+    "height": 932,
+    "immersive": true,
+    "overflow": false,
+    "overlaps": 0,
+    "page": "/mushaf/604",
+    "style": "dark",
+    "width": 430,
+    "wordCount": 73
+  },
+  {
+    "buttonVisible": true,
+    "height": 932,
+    "immersive": true,
+    "overflow": false,
+    "overlaps": 0,
+    "page": "/mushaf/604",
+    "style": "paper",
+    "width": 430,
+    "wordCount": 73
+  },
+  {
+    "buttonVisible": true,
+    "height": 932,
+    "immersive": true,
+    "overflow": false,
+    "overlaps": 0,
+    "page": "/mushaf/604",
+    "style": "light",
+    "width": 430,
+    "wordCount": 73
+  },
+  {
+    "buttonVisible": true,
+    "height": 960,
+    "immersive": true,
+    "overflow": false,
+    "overlaps": 0,
+    "page": "/mushaf/604",
+    "style": "dark",
+    "width": 650,
+    "wordCount": 73
+  },
+  {
+    "buttonVisible": true,
+    "height": 960,
+    "immersive": true,
+    "overflow": false,
+    "overlaps": 0,
+    "page": "/mushaf/604",
+    "style": "paper",
+    "width": 650,
+    "wordCount": 73
+  },
+  {
+    "buttonVisible": true,
+    "height": 960,
+    "immersive": true,
+    "overflow": false,
+    "overlaps": 0,
+    "page": "/mushaf/604",
+    "style": "light",
+    "width": 650,
+    "wordCount": 73
+  }
+]
