@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { mushafOfflineTasks, readMushafOfflineStatus } from './mushaf-offline';
 // Мушаф: QCF layout sizing, zoom/pan, immersive mode and page navigation.
 (function () {
   if (!/firefox/i.test(navigator.userAgent)) return;
@@ -50,6 +51,10 @@
   var mobilePageFitCache = {};
   var allPreloadState = { running: false, done: false, total: 0, completed: 0, failed: 0, loadedBytes: 0, totalBytes: 0 };
   var allPreloadStatusTimer = 0;
+  var offlineAvailability = 'checking';
+  var offlineCheckPromise = null;
+  var offlineMissing = [];
+  var offlineReason = '';
   var mobilePreloadStatusHidden = false;
   var activePage = currentPage();
   var lastImmersiveNavAt = 0;
@@ -195,11 +200,14 @@
   function hideMobileControls() {
     closeMobileMenu();
     body.classList.remove('mushaf-mobile-controls-visible');
+    syncMobilePreloadStatus();
   }
 
   function showMobileControls() {
     if (!isMobileViewport() || isImmersive()) return;
+    if (!body.classList.contains('mushaf-mobile-controls-visible')) mobilePreloadStatusHidden = false;
     body.classList.add('mushaf-mobile-controls-visible');
+    syncMobilePreloadStatus();
   }
 
   function toggleMobileControls() {
@@ -215,6 +223,7 @@
     body.classList.toggle('mushaf-mobile-menu-open', open);
     if (mobileMenu) mobileMenu.setAttribute('aria-hidden', open ? 'false' : 'true');
     if (mobileToggle) mobileToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open && !allPreloadState.running) refreshOfflineStatus();
   }
 
   function mobileReaderBaseScale() {
@@ -725,6 +734,22 @@
     });
   }
 
+  function syncKhatmControls(page) {
+    var last = page === 604;
+    body.classList.toggle('mushaf-last-page', last);
+    document.querySelectorAll('[data-mushaf-khatm]').forEach(function (link) { link.hidden = !last; });
+    document.querySelectorAll('[data-mushaf-mobile-next]').forEach(function (link) {
+      link.classList.remove('disabled');
+      link.removeAttribute('aria-hidden');
+      link.style.display = '';
+      link.setAttribute('href', last ? '/mushaf/khatm' : '/mushaf/' + (page + 1));
+      link.setAttribute('aria-label', last ? 'Дуа хатма' : 'Следующая страница');
+      link.setAttribute('title', last ? 'Дуа хатма' : 'Следующая страница');
+      link.querySelector('[data-mushaf-next-arrow]').hidden = last;
+      link.querySelector('[data-mushaf-next-khatm]').hidden = !last;
+    });
+  }
+
   function syncPageControls(page) {
     var prev = page > 1 ? page - 1 : null;
     var next = page < 604 ? page + 1 : null;
@@ -738,9 +763,7 @@
     document.querySelectorAll('[data-mushaf-mobile-prev]').forEach(function (link) {
       setPageLink(link, prev, !!prev);
     });
-    document.querySelectorAll('[data-mushaf-mobile-next]').forEach(function (link) {
-      setPageLink(link, next, !!next);
-    });
+    syncKhatmControls(page);
 
     var prevImm = ensureImmersiveNav('.mushaf-imm-prev', '.mushaf-page-group .icon-btn:first-child');
     var nextImm = ensureImmersiveNav('.mushaf-imm-next', '.mushaf-page-group .icon-btn:last-child');
@@ -1001,15 +1024,23 @@
       var title = panel.querySelector('[data-mushaf-preload-title]');
       var detail = panel.querySelector('[data-mushaf-preload-detail]');
       var bar = panel.querySelector('[data-mushaf-preload-bar]');
-      panel.hidden = !state || state.hidden || (mobilePreloadStatusHidden && allPreloadState.running);
       if (state && !state.hidden) {
         if (title) title.textContent = state.title || 'Предзагрузка';
         if (detail) detail.textContent = state.detail || '';
         if (bar) bar.style.width = Math.max(0, Math.min(100, state.progress || 0)).toFixed(1) + '%';
         panel.style.setProperty('--mushaf-preload-progress', Math.max(0, Math.min(100, state.progress || 0)).toFixed(1) + '%');
       }
+      syncMobilePreloadStatus();
     }
     updateTopbarPreloadIndicator(state);
+  }
+
+  function syncMobilePreloadStatus() {
+    var panel = document.querySelector('[data-mushaf-preload-status]');
+    if (panel) {
+      panel.hidden = !isMobileViewport() || !allPreloadState.running || mobilePreloadStatusHidden ||
+        !body.classList.contains('mushaf-mobile-controls-visible');
+    }
   }
 
   function updateTopbarPreloadIndicator(state) {
@@ -1042,15 +1073,21 @@
 
   function updatePreloadButton(state) {
     var nextState = state || (allPreloadState.running ? 'loading' : allPreloadState.done ? 'ready' : allPreloadState.failed ? 'error' : 'idle');
+    if (!allPreloadState.running && offlineAvailability !== 'available') nextState = offlineAvailability;
     document.querySelectorAll('[data-mushaf-preload-all]').forEach(function (button) {
       button.classList.toggle('is-loading', nextState === 'loading');
       button.classList.toggle('is-ready', nextState === 'ready');
       button.classList.toggle('is-error', nextState === 'error');
-      button.disabled = nextState === 'loading' && !button.classList.contains('mushaf-mobile-action-preload');
+      button.disabled = nextState === 'ready' || nextState === 'checking' || nextState === 'unavailable' || (nextState === 'loading' && !button.classList.contains('mushaf-mobile-action-preload'));
+      var description = nextState === 'unavailable' ? offlineReason : nextState === 'checking' ? 'Проверяем сохранённые страницы' : nextState === 'ready' ? 'Все страницы и шрифты сохранены для чтения офлайн' : nextState === 'error' ? (offlineReason || 'Повторить подгрузку недостающих файлов') : 'Подгрузить весь мусхаф и суры';
+      button.setAttribute('title', description);
+      button.setAttribute('aria-label', description);
       // Mobile keeps the download SVG in its own span; update only the label.
       var label = button.querySelector('.mushaf-mobile-action-label') || button.querySelector('span:not(.ui-inline-icon)');
       if (!label) return;
-      if (nextState === 'loading') label.textContent = 'В фоне';
+      if (nextState === 'checking') label.textContent = 'Проверяем';
+      else if (nextState === 'unavailable') label.textContent = 'Недоступно';
+      else if (nextState === 'loading') label.textContent = 'В фоне';
       else if (nextState === 'ready') label.textContent = 'Готово';
       else if (nextState === 'error') label.textContent = 'Повторить';
       else label.textContent = 'Подгрузить';
@@ -1087,12 +1124,8 @@
     });
   }
 
-  function mushafFontUrl(page) {
-    return 'https://verses.quran.foundation/fonts/quran/hafs/v4/colrv1/woff2/p' + page + '.woff2';
-  }
-
-  function preloadRouteHtml(url, onProgress) {
-    if (url.indexOf('/mushaf/') === 0 && pageCache[url]) return Promise.resolve();
+  function preloadRouteHtml(url, onProgress, requireStoredCopy) {
+    if (!requireStoredCopy && url.indexOf('/mushaf/') === 0 && pageCache[url]) return Promise.resolve();
     return trackedFetchText(url, onProgress)
       .then(function (html) {
         if (url.indexOf('/mushaf/') === 0 && html) pageCache[url] = html;
@@ -1137,14 +1170,14 @@
       if (task.type === 'font') {
         return trackedFetchBinary(task.url, function (loaded, total) {
           trackTaskBytes(task, loaded, total);
-        }).then(function (bytes) {
+        }, true).then(function (bytes) {
           finishPreloadTaskBytes(task, bytes);
           markPreloadTask(true);
         });
       }
       return preloadRouteHtml(task.url, function (loaded, total) {
         trackTaskBytes(task, loaded, total);
-      }).then(function (html) {
+      }, true).then(function (html) {
         finishPreloadTaskBytes(task, html ? html.length : task.loadedBytes);
         markPreloadTask(true);
       });
@@ -1153,22 +1186,64 @@
     });
   }
 
+  function offlineTasks() {
+    return mushafOfflineTasks().map(function (task) {
+      return Object.assign(task, { estimatedBytes: estimatePreloadBytes(task.type), loadedBytes: 0 });
+    });
+  }
+
+  function requestOfflineStatus() {
+    return readMushafOfflineStatus(navigator.serviceWorker, location.origin);
+  }
+
+  function refreshOfflineStatus() {
+    if (allPreloadState.running) return Promise.resolve(null);
+    if (offlineCheckPromise) return offlineCheckPromise;
+    if (/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || !('serviceWorker' in navigator) || !window.isSecureContext) {
+      offlineAvailability = 'unavailable';
+      offlineReason = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) ? 'Офлайн-подгрузка недоступна на локальном сервере' : 'Офлайн-подгрузка недоступна в этом браузере';
+      allPreloadState.done = false;
+      updatePreloadButton();
+      return Promise.resolve(null);
+    }
+    offlineAvailability = 'checking';
+    updatePreloadButton();
+    offlineCheckPromise = requestOfflineStatus().then(function (status) {
+      offlineAvailability = 'available';
+      offlineReason = '';
+      offlineMissing = status.missing;
+      allPreloadState.done = offlineMissing.length === 0;
+      if (allPreloadState.done) allPreloadState.failed = 0;
+      return status;
+    }).catch(function () {
+      offlineAvailability = 'error';
+      offlineReason = 'Не удалось проверить сохранённые страницы. Повторите попытку';
+      allPreloadState.done = false;
+      return null;
+    }).finally(function () {
+      offlineCheckPromise = null;
+      updatePreloadButton();
+    });
+    return offlineCheckPromise;
+  }
+
   function preloadAllMushafBackground() {
     if (allPreloadState.running) return Promise.resolve(false);
-    var tasks = [];
-    for (var page = 1; page <= 604; page++) {
-      tasks.push({ type: 'page', url: '/mushaf/' + page, estimatedBytes: estimatePreloadBytes('page'), loadedBytes: 0 });
-      tasks.push({ type: 'font', url: mushafFontUrl(page), estimatedBytes: estimatePreloadBytes('font'), loadedBytes: 0 });
-    }
-    for (var surah = 1; surah <= 114; surah++) {
-      tasks.push({ type: 'surah', url: '/surah/' + surah, estimatedBytes: estimatePreloadBytes('surah'), loadedBytes: 0 });
-    }
+    return refreshOfflineStatus().then(function (status) {
+      if (!status || allPreloadState.done || allPreloadState.running) return false;
+      return downloadMissingMushafFiles();
+    });
+  }
+
+  function downloadMissingMushafFiles() {
+    var missing = new Set(offlineMissing);
+    var tasks = offlineTasks().filter(function (task) { return missing.has(new URL(task.url, location.origin).href); });
 
     allPreloadState = {
       running: true,
       done: false,
-      total: tasks.length,
-      completed: 0,
+      total: 1322,
+      completed: 1322 - tasks.length,
       failed: 0,
       loadedBytes: 0,
       totalBytes: tasks.reduce(function (sum, task) { return sum + (task.estimatedBytes || 0); }, 0),
@@ -1176,9 +1251,9 @@
     updatePreloadButton('loading');
     updatePreloadStatus({
       title: 'Фоновая подгрузка',
-      detail: '0 / ' + tasks.length,
+      detail: allPreloadState.completed + ' / 1322',
       size: 'Осталось примерно ' + formatMb(allPreloadState.totalBytes),
-      progress: 1,
+      progress: allPreloadState.completed / allPreloadState.total * 100,
       status: 'running',
     });
 
@@ -1191,21 +1266,33 @@
     }
 
     return Promise.all(Array.from({ length: workers }, worker))
-      .then(function () {
+      .then(function () { return requestOfflineStatus(); })
+      .then(function (status) {
         allPreloadState.running = false;
-        allPreloadState.done = allPreloadState.failed === 0;
+        offlineMissing = status.missing;
+        allPreloadState.failed = offlineMissing.length;
+        allPreloadState.completed = 1322 - offlineMissing.length;
+        allPreloadState.done = offlineMissing.length === 0;
         updatePreloadButton(allPreloadState.done ? 'ready' : 'error');
         updatePreloadStatus({
           title: allPreloadState.done ? 'Мусхаф готов офлайн' : 'Подгрузка завершена с ошибками',
           detail: allPreloadState.completed + ' / ' + allPreloadState.total + (allPreloadState.failed ? ', ошибок: ' + allPreloadState.failed : ''),
           size: allPreloadState.done ? 'Всё подгружено' : 'Осталось примерно ' + formatMb(Math.max(0, allPreloadState.totalBytes - allPreloadState.loadedBytes)),
-          progress: 100,
+          progress: allPreloadState.completed / allPreloadState.total * 100,
           status: allPreloadState.done ? 'done' : 'error',
         });
         if (allPreloadState.done) {
           window.setTimeout(function () { updatePreloadStatus({ hidden: true }); }, 3600);
         }
         return allPreloadState.done;
+      }).catch(function () {
+        allPreloadState.running = false;
+        allPreloadState.done = false;
+        offlineAvailability = 'error';
+        offlineReason = 'Не удалось проверить сохранение файлов. Повторите попытку';
+        updatePreloadButton();
+        updatePreloadStatus({ hidden: true });
+        return false;
       });
   }
 
@@ -1231,8 +1318,8 @@
     });
   }
 
-  function trackedFetchBinary(url, onProgress) {
-    if (fontPreloadCache[url]) return Promise.resolve(0);
+  function trackedFetchBinary(url, onProgress, requireStoredCopy) {
+    if (!requireStoredCopy && fontPreloadCache[url]) return Promise.resolve(0);
     return fetch(url, { mode: 'cors', cache: 'force-cache' }).then(function (response) {
       if (!response.ok) throw new Error('Failed to preload font');
       var total = parseInt(response.headers.get('content-length') || '0', 10) || 0;
@@ -1509,6 +1596,16 @@
   }
 
   syncTopbarState(activePage);
+  syncKhatmControls(activePage);
+  try { localStorage.removeItem('q_mushaf_preload_done_v6'); } catch (e) {}
+  refreshOfflineStatus();
+  window.addEventListener('focus', function () { if (!allPreloadState.running) refreshOfflineStatus(); });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && !allPreloadState.running) refreshOfflineStatus(); });
+  if ('serviceWorker' in navigator) navigator.serviceWorker.addEventListener('controllerchange', function () {
+    if (allPreloadState.running) return;
+    if (offlineCheckPromise) offlineCheckPromise.then(function () { refreshOfflineStatus(); });
+    else refreshOfflineStatus();
+  });
   rememberMushafPosition(activePage, new URLSearchParams(location.search).get('ayah'));
   layoutMushaf(null);
   var initialFontPage = activePage;
@@ -1757,10 +1854,10 @@
     var preloadBtn = event.target && event.target.closest && event.target.closest('[data-mushaf-preload-all]');
     if (preloadBtn) {
       event.preventDefault();
+      if (allPreloadState.done) return;
       if (allPreloadState.running || preloadBtn.classList.contains('is-loading')) {
         mobilePreloadStatusHidden = !mobilePreloadStatusHidden;
-        var mobileStatus = document.querySelector('[data-mushaf-preload-status]');
-        if (mobileStatus) mobileStatus.hidden = mobilePreloadStatusHidden;
+        syncMobilePreloadStatus();
         return;
       }
       mobilePreloadStatusHidden = false;
@@ -1951,7 +2048,7 @@
     reader.addEventListener('pointerdown', function (e) {
       if (!isMobileViewport() || !e.isPrimary || swipeNavigating) return;
       if (e.target && e.target.closest && e.target.closest('[data-mushaf-mobile-controls], .mushaf-zoom-fab')) return;
-      if (e.target && e.target.closest && e.target.closest('.mushaf-immersive-exit, .mushaf-imm-nav')) return;
+      if (e.target && e.target.closest && e.target.closest('.mushaf-immersive-exit, .mushaf-imm-nav, [data-mushaf-khatm]')) return;
       if (e.pointerType === 'mouse' && e.button !== 0) return;
       swipePointerId = e.pointerId;
       sx = e.clientX;

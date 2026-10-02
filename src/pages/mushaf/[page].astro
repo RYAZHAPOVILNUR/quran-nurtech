@@ -285,7 +285,10 @@ const juzList = Array.from({ length: 30 }, (_, i) => i + 1).map((n) => ({
               <input name="page" type="number" inputmode="numeric" min="1" max={MUSHAF_TOTAL_PAGES} value={pageNum} aria-label="Номер страницы" />
               <span>/ {MUSHAF_TOTAL_PAGES}</span>
             </form>
-            <a class={`mushaf-mobile-page-btn ${nextPage ? '' : 'disabled'}`} data-mushaf-mobile-next href={nextPage ? `/mushaf/${nextPage}` : undefined} aria-label="Следующая страница" title="Следующая страница" set:html={icons.arrowRight} />
+            <a class="mushaf-mobile-page-btn" data-mushaf-mobile-next href={nextPage ? `/mushaf/${nextPage}` : '/mushaf/khatm'} aria-label={nextPage ? 'Следующая страница' : 'Дуа хатма'} title={nextPage ? 'Следующая страница' : 'Дуа хатма'}>
+              <span data-mushaf-next-arrow hidden={!nextPage} set:html={icons.arrowRight}></span>
+              <span data-mushaf-next-khatm hidden={!!nextPage} set:html={icons.book}></span>
+            </a>
           </div>
 
           <div class="mushaf-mobile-selects">
@@ -312,6 +315,9 @@ const juzList = Array.from({ length: 30 }, (_, i) => i + 1).map((n) => ({
           </div>
 
           <div class="mushaf-mobile-action-list">
+            <a class="mushaf-mobile-action" data-mushaf-khatm href="/mushaf/khatm" hidden={!!nextPage}>
+              <span class="mushaf-mobile-action-icon" set:html={icons.book}></span><span class="mushaf-mobile-action-label">Дуа хатма</span>
+            </a>
             <button type="button" class="mushaf-mobile-action" data-mushaf-ayah-jump aria-label="Перейти к аяту">
               <span class="mushaf-mobile-action-icon" set:html={icons.search}></span><span class="mushaf-mobile-action-label">Перейти к аяту</span>
             </button>
@@ -342,6 +348,7 @@ const juzList = Array.from({ length: 30 }, (_, i) => i + 1).map((n) => ({
     <button type="button" class="mushaf-immersive-exit" data-mushaf-immersive aria-label="Выйти из режима чтения" title="Выйти (Esc)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
+    <a class="mushaf-khatm-fullscreen" data-mushaf-khatm href="/mushaf/khatm" hidden={!!nextPage} aria-label="Дуа хатма" title="Дуа хатма" set:html={icons.book} />
     {prevPage && (
       <a class="mushaf-imm-nav mushaf-imm-prev" href={`/mushaf/${prevPage}`} aria-label="Предыдущая страница" title="Предыдущая страница" set:html={icons.arrowLeft} />
     )}
