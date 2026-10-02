@@ -29,12 +29,12 @@ const sectionTitle = contextMap[pathname] ?? '';
 
 <button class="icon-btn only-mobile" data-act="drawer" aria-label="Список сур" set:html={icons.menu} />
 
-<a href="/" class="brand" aria-label="Коран онлайн — главная" title="На главную — выбор суры">
+<a href="/" class="brand" aria-label="Коран онлайн — главная" title="На главную — выбор суры" data-i18n-title="tb.home_hint">
   <span class="brand-mark" aria-hidden="true">
     <img src="/brand-mark.png?v=g2" width="42" height="42" alt="" loading="eager" decoding="sync" fetchpriority="high" />
   </span>
   <span class="brand-copy">
-    <span class="brand-name">Коран онлайн</span>
+    <span class="brand-name" data-i18n="brand.name">Коран онлайн</span>
     <span class="brand-domain">quran.nurtech.dev</span>
   </span>
 </a>

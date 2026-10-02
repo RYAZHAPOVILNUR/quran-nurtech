@@ -56,7 +56,7 @@
     left: 0;
     width: var(--sidebar-w);
     border: 0;
-    border-right: 1px solid var(--hairline);
+    border-right: 1px solid var(--sys-separator);
     border-radius: 0;
     box-shadow: none;
     transform: translateX(calc(-100% - 1px)) !important;
@@ -65,7 +65,7 @@
       transform 0.28s cubic-bezier(0.2, 0, 0, 1),
       visibility 0.28s ease;
     z-index: 30;
-    background: var(--panel-bg);
+    background: var(--sys-sidebar);
   }
   :root[data-sidebar='closed'] .drawer {
     transform: translateX(calc(-100% - 1px)) !important;
@@ -80,7 +80,7 @@
   }
   .drawer .dh {
     padding: 12px;
-    border-bottom: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--sys-separator);
   }
   .drawer .dh [data-act='drawer-close'] {
     display: grid;
@@ -94,7 +94,7 @@
     font-size: var(--fs-13);
   }
   .drawer-progress {
-    border-bottom: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--sys-separator);
   }
   .drawer .dlist {
     flex: none;
@@ -111,19 +111,19 @@
     font-size: var(--fs-14);
   }
   .drawer .dlist a:hover {
-    background: color-mix(in srgb, var(--ink) 6%, transparent);
+    background: var(--sys-fill);
   }
   .drawer .dlist a.on {
-    background: var(--accent);
+    background: var(--sys-fill-strong);
     box-shadow: none;
   }
   .drawer .dlist a.on .n,
   .drawer .dlist a.on .nm,
   .drawer .dlist a.on .ar-name {
-    color: var(--accent-ink);
+    color: var(--sys-label);
   }
   .drawer .dlist a.on .nm span {
-    color: color-mix(in srgb, var(--accent-ink) 72%, transparent) !important;
+    color: var(--sys-secondary-label) !important;
   }
 }
 
@@ -150,11 +150,11 @@
     border-color: transparent;
     background: transparent;
     box-shadow: none;
-    color: var(--ink-soft);
+    color: var(--sys-secondary-label);
   }
   .topbar-inner .icon-btn:hover {
-    background: color-mix(in srgb, var(--ink) 8%, transparent);
-    color: var(--ink);
+    background: var(--sys-fill);
+    color: var(--sys-label);
     transform: none;
   }
   .topbar-inner [data-act='drawer'].only-mobile {

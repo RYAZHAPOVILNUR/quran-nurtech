@@ -11,7 +11,7 @@
 .hero h1 {
   font-size: clamp(32px, 5.4vw, 50px);
   margin: 0 0 16px;
-  background: linear-gradient(180deg, var(--ink), color-mix(in srgb, var(--ink) 62%, var(--accent)));
+  background: linear-gradient(180deg, var(--sys-label), color-mix(in srgb, var(--sys-label) 62%, var(--sys-accent)));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -20,12 +20,12 @@
   font-family: var(--ar-font), 'AmiriQuran', serif;
   direction: rtl;
   font-size: clamp(24px, 5.5vw, 34px);
-  color: var(--accent);
+  color: var(--sys-accent);
   line-height: 2.1;
   margin: 8px 0;
 }
 .hero .verse-tr {
-  color: var(--ink-soft);
+  color: var(--sys-secondary-label);
   font-size: 16px;
   max-width: 560px;
   margin: 0 auto 26px;

@@ -49,6 +49,7 @@
     document.addEventListener('DOMContentLoaded', qFillContext);
   else qFillContext();
 
+  // (Переключатель локали RU/العربية обрабатывает client/i18n.ts — initLocaleSwitch.)
 
   // ⌘, / Ctrl+, — открыть инспектор настроек (как в macOS-приложениях)
   document.addEventListener('keydown', function (e) {

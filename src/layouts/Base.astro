@@ -65,10 +65,12 @@ import '../styles/mushaf-reader.css';
 import '../styles/mushaf-zoom.css';
 import '../styles/mushaf-immersive.css';
 import '../styles/mushaf-responsive.css';
+import '../styles/rtl.css';
 import TopBar from '../components/TopBar.astro';
 import Drawer from '../components/Drawer.astro';
 import Player from '../components/Player.astro';
 import { icons } from '../lib/icons';
+import { getMushafHrefForPath } from '../lib/mushaf-link';
 
 export interface Props {
   title: string;
@@ -87,6 +89,7 @@ const desc =
   'Коран онлайн на русском языке: чтение, перевод, тафсир ас-Саади, аудио чтецов, поиск и заучивание. 114 сур, 6236 аятов.';
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const path = Astro.url.pathname;
+const mushafHref = getMushafHrefForPath(path);
 const tab = (name: 'home' | 'read' | 'mushaf' | 'search') => {
   if (name === 'home') return path === '/' ? 'active' : '';
   if (name === 'read') return path.startsWith('/surah') || path.startsWith('/ayah') || /^\/\d+:\d+/.test(path) ? 'active' : '';
@@ -171,9 +174,9 @@ const tab = (name: 'home' | 'read' | 'mushaf' | 'search') => {
             }
           }
           var sidebar = localStorage.getItem('q_sidebar');
-          if (sidebar === 'open') localStorage.setItem('q_sidebar', 'closed');
-          document.documentElement.setAttribute('data-sidebar', 'closed');
           if (/^\/mushaf\/\d+/.test(location.pathname)) {
+            if (sidebar === 'open') localStorage.setItem('q_sidebar', 'closed');
+            document.documentElement.setAttribute('data-sidebar', 'closed');
             var vw = Math.max(320, window.innerWidth || 0);
             var vh = Math.max(360, window.innerHeight || 0);
             var mobile = vw <= 650;
@@ -190,6 +193,17 @@ const tab = (name: 'home' | 'read' | 'mushaf' | 'search') => {
             var qcfMin = mobile ? 12.5 : 20;
             var qcfMax = mobile ? 29 : 44;
             el.setProperty('--mushaf-qcf-size', Math.max(qcfMin, Math.min(qcfMax, pageWidth * qcfRatio)).toFixed(2) + 'px');
+          } else if (sidebar === 'closed' || sidebar === 'open') {
+            document.documentElement.setAttribute('data-sidebar', sidebar);
+          }
+          var loc = 'ru';
+          try {
+            loc = JSON.parse(localStorage.getItem('q_locale') || '"ru"');
+          } catch (e) {}
+          if (loc === 'ar') {
+            document.documentElement.setAttribute('lang', 'ar');
+            document.documentElement.setAttribute('dir', 'rtl');
+            document.documentElement.setAttribute('data-locale', 'ar');
           }
         } catch (e) {}
       })();
@@ -224,7 +238,7 @@ const tab = (name: 'home' | 'read' | 'mushaf' | 'search') => {
             return;
           }
           addEventListener('load', function () {
-            navigator.serviceWorker.register('/sw.js?v=mushaf-sajda-flow-1').catch(function () {});
+            navigator.serviceWorker.register('/sw.js?v=mushaf-sajda-flow-2').catch(function () {});
           });
         })();
       }
@@ -239,27 +253,26 @@ const tab = (name: 'home' | 'read' | 'mushaf' | 'search') => {
     <footer class="footer">
       <div class="container">
         <div class="fnav">
-          <a href="/">Главная</a>
-          <a href="/mushaf/1">Мусхаф</a>
-          <a href="/progress">Мой прогресс</a>
-          <a href="/bookmarks">Закладки</a>
-          <a href="/topics">Аяты по темам</a>
-          <a href="/glossary">Словарь</a>
-          <a href="/tasbih">Тасбих</a>
-          <a href="/backup">Резервная копия</a>
-          <a href="/search">Поиск</a>
-          <a href="/audio">Аудио</a>
-          <a href="/videos">Видео</a>
-          <a href="/stats">Статистика</a>
-          <a href="/download">Скачать</a>
-          <a href="/howto">Как работать</a>
-          <a href="/about">О проекте</a>
-          <a href="/translators">Переводчики</a>
-          <a href="/privacy">Конфиденциальность</a>
+          <a href="/" data-i18n="tab.home">Главная</a>
+          <a href={mushafHref} data-i18n="nav.mushaf">Мусхаф</a>
+          <a href="/progress" data-i18n="nav.progress">Мой прогресс</a>
+          <a href="/bookmarks" data-i18n="nav.bookmarks">Закладки</a>
+          <a href="/topics" data-i18n="nav.topics">Аяты по темам</a>
+          <a href="/glossary" data-i18n="foot.glossary">Словарь</a>
+          <a href="/tasbih" data-i18n="nav.tasbih">Тасбих</a>
+          <a href="/backup" data-i18n="nav.backup">Резервная копия</a>
+          <a href="/search" data-i18n="tab.search">Поиск</a>
+          <a href="/audio" data-i18n="home.audio">Аудио</a>
+          <a href="/videos" data-i18n="foot.videos">Видео</a>
+          <a href="/stats" data-i18n="foot.stats">Статистика</a>
+          <a href="/download" data-i18n="foot.download">Скачать</a>
+          <a href="/howto" data-i18n="foot.howto">Как работать</a>
+          <a href="/about" data-i18n="nav.about">О проекте</a>
+          <a href="/translators" data-i18n="foot.translators">Переводчики</a>
+          <a href="/privacy" data-i18n="foot.privacy">Конфиденциальность</a>
         </div>
-        <div>
-          Коран онлайн — quran.nurtech.dev. Тексты и аудио из открытых источников (см.
-          <a class="link" href="/about" style="color:var(--accent)">О проекте</a>).
+        <div data-i18n="foot.note">
+          Коран онлайн — quran.nurtech.dev. Тексты и аудио из открытых источников.
         </div>
       </div>
     </footer>
@@ -269,29 +282,30 @@ const tab = (name: 'home' | 'read' | 'mushaf' | 'search') => {
     <nav class="mobile-tabbar" aria-label="Основная навигация">
       <a class={tab('home')} href="/" aria-label="Главная">
         <span set:html={icons.home}></span>
-        <b>Главная</b>
+        <b data-i18n="tab.home">Главная</b>
       </a>
       <a class={tab('read')} href="/surah/1" aria-label="Читать">
         <span set:html={icons.book}></span>
-        <b>Читать</b>
+        <b data-i18n="tab.read">Читать</b>
       </a>
-      <a class={tab('mushaf')} href="/mushaf/1" aria-label="Мусхаф">
+      <a class={tab('mushaf')} href={mushafHref} aria-label="Мусхаф">
         <span set:html={icons.book}></span>
-        <b>Мусхаф</b>
+        <b data-i18n="tab.mushaf">Мусхаф</b>
       </a>
       <a class={tab('search')} href="/search" aria-label="Поиск">
         <span set:html={icons.search}></span>
-        <b>Поиск</b>
+        <b data-i18n="tab.search">Поиск</b>
       </a>
       <button type="button" data-act="drawer" aria-label="Меню">
         <span set:html={icons.menu}></span>
-        <b>Меню</b>
+        <b data-i18n="tab.menu">Меню</b>
       </button>
     </nav>
     <div class="toast" id="toast"></div>
 
     <script>
       import '../client/app';
+      import '../client/i18n';
     </script>
   </body>
 </html>

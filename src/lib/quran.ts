@@ -26,6 +26,7 @@ export interface Ayah {
   tj: string; // арабский с таджвид-разметкой
   ru: string; // перевод Кулиева
   aa?: string; // перевод Абу Аделя
+  mu?: string; // التفسير الميسر (аль-Муяссар) — ясный смысл на арабском
   tl?: string; // транслитерация (латиница)
   p?: number; // страница мусхафа (1..604)
   j?: number; // джуз (1..30)
@@ -129,6 +130,7 @@ export interface Translation {
 export const TRANSLATIONS: Translation[] = [
   { id: 'kuliev', name: 'Эльмир Кулиев', short: 'Кулиев', kind: 'translation', available: true },
   { id: 'abuadel', name: 'Абу Адель', short: 'Абу Адель', kind: 'translation', available: true },
+  { id: 'muyassar', name: 'Арабский · التفسير الميسر', short: 'Арабский', kind: 'translation', available: true },
   { id: 'saadi', name: 'Тафсир ас-Саади', short: 'ас-Саади', kind: 'tafsir', available: true },
   { id: 'ibn-kathir', name: 'Тафсир Ибн Касира', short: 'Ибн Касир', kind: 'tafsir', available: true },
 ];

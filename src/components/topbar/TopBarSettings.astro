@@ -21,12 +21,12 @@ const themes = [
 
 <!-- Настройки чтения -->
 <div class="menu-wrap settings-menu-wrap" data-menu-wrap data-settings-menu-wrap>
-  <button class="icon-btn" data-menu-toggle data-settings-toggle aria-label="Настройки чтения" title="Настройки" set:html={icons.settings} />
+  <button class="icon-btn" data-menu-toggle data-settings-toggle aria-label="Настройки чтения" title="Настройки" data-i18n-title="tb.settings" set:html={icons.settings} />
   <div class="menu" data-menu="settings" role="complementary" aria-label="Настройки чтения">
     <div class="settings-panel-head">
       <div>
-        <strong>Настройки чтения</strong>
-        <span>Текст, перевод, звук и оформление</span>
+        <strong data-i18n="tb.settings">Настройки чтения</strong>
+        <span data-i18n="tb.settings_sub">Текст, перевод, звук и оформление</span>
       </div>
       <button class="settings-panel-close" type="button" data-menu-close aria-label="Закрыть настройки" set:html={icons.close} />
     </div>
@@ -61,7 +61,7 @@ const themes = [
 
       <InspectorSection title="Аудио" description="Голос для прослушивания">
         <label class="settings-field settings-field-select">
-          <span>Чтец</span>
+          <span data-i18n="tb.reciter">Чтец</span>
           <select class="sel" data-reciter-sel>
             {reciters.map((r) => <option value={r.id}>{r.name}</option>)}
           </select>
@@ -71,20 +71,20 @@ const themes = [
       <InspectorSection title="Типографика" description="Размеры и арабский шрифт">
         <div class="settings-group settings-sliders">
           <label class="settings-field settings-field-range">
-            <span>Арабский</span>
+            <span data-i18n="tb.size_arabic">Арабский</span>
             <input type="range" min="22" max="52" step="2" data-set="ar" />
           </label>
           <label class="settings-field settings-field-range">
-            <span>Перевод</span>
+            <span data-i18n="tb.size_translation">Перевод</span>
             <input type="range" min="14" max="26" step="1" data-set="ru" />
           </label>
           <label class="settings-field settings-field-range">
-            <span>Интервал</span>
+            <span data-i18n="tb.line_spacing">Интервал</span>
             <input type="range" min="1.5" max="2.6" step="0.1" data-set="lh" />
           </label>
         </div>
         <div class="settings-field settings-field-stack">
-          <span>Шрифт арабского</span>
+          <span data-i18n="tb.arabic_font">Шрифт арабского</span>
           <SegmentedControl options={fonts} dataAttr="data-font" ariaLabel="Шрифт арабского" />
         </div>
       </InspectorSection>
@@ -93,16 +93,16 @@ const themes = [
         <div class="settings-group">
           <SwitchRow label="Таджвид" description="Цветные правила чтения" data-tajweed />
           <div class="tj-legend">
-            <span><i class="tj-dot d-madd"></i>Мадд</span>
-            <span><i class="tj-dot d-ghunna"></i>Гунна</span>
-            <span><i class="tj-dot d-ikhfa"></i>Ихфа</span>
-            <span><i class="tj-dot d-iqlab"></i>Икляб</span>
-            <span><i class="tj-dot d-qalqala"></i>Калькаля</span>
-            <span><i class="tj-dot d-silent"></i>Беззвучные</span>
+            <span><i class="tj-dot d-madd"></i><span data-i18n="tb.tj_madd">Мадд</span></span>
+            <span><i class="tj-dot d-ghunna"></i><span data-i18n="tb.tj_ghunna">Гунна</span></span>
+            <span><i class="tj-dot d-ikhfa"></i><span data-i18n="tb.tj_ikhfa">Ихфа</span></span>
+            <span><i class="tj-dot d-iqlab"></i><span data-i18n="tb.tj_iqlab">Икляб</span></span>
+            <span><i class="tj-dot d-qalqala"></i><span data-i18n="tb.tj_qalqala">Калькаля</span></span>
+            <span><i class="tj-dot d-silent"></i><span data-i18n="tb.tj_silent">Беззвучные</span></span>
           </div>
         </div>
         <div class="settings-field settings-field-stack">
-          <span>Тема</span>
+          <span data-i18n="tb.theme_label">Тема</span>
           <SegmentedControl options={themes} dataAttr="data-theme-set" class="seg-grid2" data-theme-seg ariaLabel="Тема" />
         </div>
       </InspectorSection>
@@ -113,7 +113,7 @@ const themes = [
           <SwitchRow label="Заучивание" description="Скрыть перевод и повторять аят" data-memorize />
         </div>
         <div class="settings-field settings-field-stack">
-          <span>Повтор аята</span>
+          <span data-i18n="tb.ayah_repeat">Повтор аята</span>
           <SegmentedControl
             options={[
               { id: '2', label: '×2' },

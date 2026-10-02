@@ -1,0 +1,56 @@
+/* ================= RTL — арабская локаль (data-locale=ar, dir=rtl) =================
+   Отзеркаливаем то, что задано физическими свойствами (сайдбар, отступы шелла).
+   Инлайновый текст/флексы разворачивает сам dir=rtl. */
+
+html[dir='rtl'] {
+  direction: rtl;
+}
+
+/* --- Боковое меню (drawer / source list) выезжает справа --- */
+/* базовый/мобильный оверлей: якорим справа, прячем за правый край */
+html[dir='rtl'] .drawer {
+  left: auto;
+  right: 10px;
+  transform: translateX(115%);
+}
+html[dir='rtl'] .drawer.show {
+  transform: translateX(0);
+}
+
+@media (min-width: 1120px) {
+  html[dir='rtl'] body {
+    padding-left: 0 !important;
+    padding-right: var(--sidebar-current-w);
+  }
+  html[dir='rtl'] .drawer {
+    left: auto !important;
+    right: 0;
+    transform: translateX(0) !important;
+  }
+  html[dir='rtl'][data-sidebar='closed'] .drawer {
+    transform: translateX(calc(100% + 1px)) !important;
+  }
+  /* инспектор настроек: на десктопе он справа → в RTL зеркалим влево */
+  html[dir='rtl'] body.settings-panel-open {
+    padding-right: 0 !important;
+    padding-left: var(--inspector-w, 0px) !important;
+  }
+  html[dir='rtl'] body.settings-panel-open .drawer {
+    transform: translateX(calc(100% + 1px)) !important;
+  }
+}
+
+/* --- Латиница/домен/числовые референсы держим LTR внутри RTL-потока --- */
+html[dir='rtl'] .brand-domain,
+html[dir='rtl'] .lang-cur,
+html[dir='rtl'] .ayah-no,
+html[dir='rtl'] .home-eyebrow,
+html[dir='rtl'] [data-context] .tc-s {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* --- Крошки/иконки-стрелки: логическое направление --- */
+html[dir='rtl'] .crumb span {
+  transform: scaleX(1);
+}

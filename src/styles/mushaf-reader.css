@@ -11,7 +11,10 @@ body[data-page-mode='mushaf'] {
   height: var(--mushaf-vvh);
   width: 100%;
   overflow: hidden;
-  background: var(--mushaf-stage);
+  background:
+    radial-gradient(circle at 50% 10%, color-mix(in srgb, var(--sys-fill-vibrant) 54%, transparent), transparent 36%),
+    linear-gradient(180deg, color-mix(in srgb, var(--mushaf-stage) 88%, var(--sys-secondary-grouped-bg)) 0%, var(--mushaf-stage) 62%),
+    var(--mushaf-stage);
   overscroll-behavior: none;
 }
 
@@ -117,6 +120,7 @@ body[data-page-mode='mushaf'] .mushaf-nav-sel,
 body[data-page-mode='mushaf'] .mushaf-jump,
 body[data-page-mode='mushaf'] .mushaf-zoom,
 body[data-page-mode='mushaf'] .mushaf-fit-btn {
+  min-height: 34px;
   border: 1px solid var(--sys-separator);
   border-radius: 12px;
   background: var(--sys-fill);
@@ -345,7 +349,7 @@ body[data-page-mode='mushaf'] .mushaf-sheet {
   padding: clamp(16px, 3.1%, 28px) clamp(12px, 2.4%, 22px) clamp(20px, 3.8%, 34px);
   overflow: hidden;
   border: 1px solid var(--mushaf-paper-line);
-  border-radius: 8px;
+  border-radius: 9px;
   background:
     linear-gradient(90deg, transparent, color-mix(in srgb, var(--mushaf-paper-line) 28%, transparent), transparent),
     var(--mushaf-paper);
@@ -668,6 +672,42 @@ body[data-page-mode='mushaf'] .mushaf-bottom {
   display: flex;
   justify-content: center;
   gap: 10px;
+  margin-top: 0;
+}
+
+@media (min-width: 821px) {
+  body[data-page-mode='mushaf'] .topbar {
+    padding-top: 6px;
+  }
+
+  body[data-page-mode='mushaf'] .topbar-inner {
+    border-radius: 0;
+    border-inline: 0;
+    border-top: 0;
+    box-shadow: none;
+    width: 100%;
+    max-width: none;
+  }
+
+  body[data-page-mode='mushaf'] .mushaf-reader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  body[data-page-mode='mushaf'] .mushaf-toolbar .icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+  }
+
+  body[data-page-mode='mushaf'] .mushaf-bottom .btn {
+    height: 36px;
+    min-height: 36px;
+    padding-inline: 14px;
+    border-radius: 12px;
+  }
 }
 
 body[data-page-mode='mushaf'].mushaf-zoomed .mushaf-sheet {

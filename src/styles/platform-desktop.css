@@ -95,9 +95,24 @@
     min-width: 0;
   }
 
+  .topbar-inner:has(.toolbar-context .tc-t) .brand {
+    padding-right: 0;
+  }
+
+  .topbar-inner:has(.toolbar-context .tc-t) .brand-copy {
+    display: none;
+  }
+
+  .topbar-inner:has(.toolbar-context .tc-t) .toolbar-context {
+    flex: 0 1 230px;
+    max-width: 230px;
+    margin-right: 2px;
+  }
+
   .quick {
     flex: 0 1 320px;
     min-width: 180px;
+    max-width: 340px;
   }
 
   .topbar-inner .reader-tool .btn {

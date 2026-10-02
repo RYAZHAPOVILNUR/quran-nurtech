@@ -12,6 +12,7 @@ const { showQuick } = Astro.props;
         type="text"
         name="q"
         placeholder="Сура, 2:255 или слово…"
+        data-i18n-ph="tb.search_ph"
         autocomplete="off"
         spellcheck="false"
         aria-label="Поиск: сура, аят или слово"
@@ -20,7 +21,7 @@ const { showQuick } = Astro.props;
       <button class="btn primary quick-submit" type="submit" aria-label="Перейти">→</button>
     </form>
   ) : (
-    <div class="topbar-title">Поиск по Корану</div>
+    <div class="topbar-title" data-i18n="tb.search_title">Поиск по Корану</div>
   )
 }
 

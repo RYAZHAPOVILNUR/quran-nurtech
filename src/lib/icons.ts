@@ -29,6 +29,7 @@ export const icons = {
   arrowLeft: s('<path d="M15 6l-6 6 6 6"/>'),
   arrowRight: s('<path d="M9 6l6 6-6 6"/>'),
   close: s('<path d="M6 6l12 12M18 6L6 18"/>'),
+  globe: s('<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.4 3.9 5.6 3.9 9s-1.4 6.6-3.9 9c-2.5-2.4-3.9-5.6-3.9-9s1.4-6.6 3.9-9z"/>'),
   continue: s('<circle cx="12" cy="12" r="9"/><path d="M10 8l5 4-5 4z" fill="currentColor" stroke="none"/>'),
   download: s('<path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 20h16"/>'),
   video: s('<rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/>'),

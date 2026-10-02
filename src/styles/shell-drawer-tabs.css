@@ -14,8 +14,8 @@
 }
 .drawer .dtabs button {
   min-width: 0;
-  flex: 1;
-  padding: 7px;
+  min-height: 26px;
+  padding: 0 8px;
   border: 0;
   background: transparent !important;
   color: var(--ink-faint);
@@ -41,16 +41,16 @@
 
 .drawer .djuz a {
   display: grid;
-  grid-template-columns: 34px minmax(0, 1fr);
-  align-items: start;
+  grid-template-columns: 28px minmax(0, 1fr);
+  align-items: center;
   column-gap: 10px;
   min-width: 0;
 }
 
 .drawer .djuz .n {
-  width: 34px;
+  width: 28px;
   padding-top: 1px;
-  text-align: center;
+  text-align: right;
 }
 
 .drawer .djuz .nm {
